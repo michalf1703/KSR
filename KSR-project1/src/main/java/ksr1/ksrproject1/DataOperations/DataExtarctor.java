@@ -33,97 +33,99 @@ public class DataExtarctor {
         ArrayList<String> tags;
         String title = "";
         String content = "";
-        Article currentArticle = new Article(0, LocalDateTime.now(), "", "", "");
+        int id = 0;
+        Article currentArticle = new Article(id, "", "", "");
 
         boolean flag;
-        try {
-            String bufferLine;
+        for (int i = 0; i <= 21; i++) {
+            String numerPliku = String.format("%03d", i);
+            String nazwaPliku = "src/main/resources/documents/reut2-" + numerPliku + ".sgm";
 
-            FileReader fileReader = new FileReader("src/main/resources/documents/reut2-021.sgm");
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            while ((bufferLine = bufferedReader.readLine()) != null){
-                if(bufferLine.contains(tag)){
-                    currentArticle = new Article(0, LocalDateTime.now(), "", "", "");
-                    tags = new ArrayList<>();
-                    do {
-                        flag = true;
-                        int znacznikPoc = bufferLine.indexOf("<");
-                        int znacznikKon = bufferLine.indexOf(">");
-                        if (znacznikKon > znacznikPoc) {
-                            if(znacznikKon + 1 >= bufferLine.length()) {
-                                flag = false;
-                            }else {
-                                bufferLine = bufferLine.substring(znacznikKon);
+            try {
+                String bufferLine;
+                FileReader fileReader = new FileReader(nazwaPliku);
+                BufferedReader bufferedReader = new BufferedReader(fileReader);
+                while ((bufferLine = bufferedReader.readLine()) != null){
+                    if(bufferLine.contains(tag)){
+                        id += 1;
+                        currentArticle = new Article(id, "", "", "");
+                        tags = new ArrayList<>();
+                        do {
+                            flag = true;
+                            int znacznikPoc = bufferLine.indexOf("<");
+                            int znacznikKon = bufferLine.indexOf(">");
+                            if (znacznikKon > znacznikPoc) {
+                                if(znacznikKon + 1 >= bufferLine.length()) {
+                                    flag = false;
+                                }else {
+                                    bufferLine = bufferLine.substring(znacznikKon);
+                                }
                             }
-                        }
-                        if(flag) {
-                            znacznikPoc = bufferLine.indexOf("<");
-                            znacznikKon = bufferLine.indexOf(">");
-                            if (znacznikKon + 1 == znacznikPoc) {
-                                bufferLine = bufferLine.substring(znacznikPoc);
-                            } else {
-                                tags.add(bufferLine.substring(znacznikKon + 1, znacznikPoc));
-                                bufferLine = bufferLine.substring(znacznikPoc);
+                            if(flag) {
+                                znacznikPoc = bufferLine.indexOf("<");
+                                znacznikKon = bufferLine.indexOf(">");
+                                if (znacznikKon + 1 == znacznikPoc) {
+                                    bufferLine = bufferLine.substring(znacznikPoc);
+                                } else {
+                                    tags.add(bufferLine.substring(znacznikKon + 1, znacznikPoc));
+                                    bufferLine = bufferLine.substring(znacznikPoc);
+                                }
                             }
-                        }
-                    }while (flag);
-                    currentArticle.setTags(tags);
-                }
-                if(bufferLine.contains("<TITLE>")){
-                    int znacznikkon = bufferLine.indexOf(">");
-                    int znacznikpoc;
-                    bufferLine = bufferLine.substring(znacznikkon+1);
-                    znacznikkon = bufferLine.indexOf(">");
-                    if(znacznikkon + 1 != bufferLine.length()){
-                        bufferLine = bufferLine.substring(znacznikkon+1);
+                        }while (flag);
+                        currentArticle.setTags(tags);
                     }
-                    if(bufferLine.contains("</TITLE>")){
-                        znacznikpoc = bufferLine.indexOf("<");
-                        title = bufferLine.substring(0,znacznikpoc);
-                    }else {
-                        while(!bufferLine.contains("</TITLE>")){
-                            title = title + bufferLine + " ";
+                    if(bufferLine.contains("<TITLE>")){
+                        int znacznikkon = bufferLine.indexOf(">");
+                        int znacznikpoc;
+                        bufferLine = bufferLine.substring(znacznikkon+1);
+                        znacznikkon = bufferLine.indexOf(">");
+                        if(znacznikkon + 1 != bufferLine.length()){
+                            bufferLine = bufferLine.substring(znacznikkon+1);
+                        }
+                        if(bufferLine.contains("</TITLE>")){
+                            znacznikpoc = bufferLine.indexOf("<");
+                            title = bufferLine.substring(0,znacznikpoc);
+                        }else {
+                            while(!bufferLine.contains("</TITLE>")){
+                                title = title + bufferLine + " ";
+                                bufferLine = bufferedReader.readLine();
+                            }
+                            znacznikpoc = bufferLine.indexOf("<");
+                            title = title + bufferLine.substring(0,znacznikpoc);
+                        }
+                        currentArticle.setTitle(title);
+                    }
+                    if(bufferLine.contains("<BODY>")){
+                        int znacznikkon = bufferLine.indexOf("<BODY>");
+                        int znacznikpoc;
+                        bufferLine = bufferLine.substring(znacznikkon+6);
+                        content = "";
+                        while (!bufferLine.contains("</BODY>")){
+                            content = content + bufferLine + " ";
                             bufferLine = bufferedReader.readLine();
                         }
                         znacznikpoc = bufferLine.indexOf("<");
-                        title = title + bufferLine.substring(0,znacznikpoc);
+                        content = content + bufferLine.substring(0,znacznikpoc);
+                        currentArticle.setBody(content);
                     }
-                    currentArticle.setTitle(title);
-                }
-                if(bufferLine.contains("<BODY>")){
-                    int znacznikkon = bufferLine.indexOf("<BODY>");
-                    int znacznikpoc;
-                    bufferLine = bufferLine.substring(znacznikkon+6);
-                    content = "";
-                    while (!bufferLine.contains("</BODY>")){
-                        content = content + bufferLine + " ";
-                        bufferLine = bufferedReader.readLine();
+                    if(bufferLine.contains("</REUTERS>")){
+                        if(currentArticle.getBody() != null){
+                            articles.add(currentArticle);
+                            incrementArtykulyCount();
+                            System.out.println(currentArticle.toString());
+                        }
                     }
-                    znacznikpoc = bufferLine.indexOf("<");
-                    content = content + bufferLine.substring(0,znacznikpoc);
-                    currentArticle.setBody(content);
+
                 }
-                if(bufferLine.contains("</REUTERS>")){
-                    if(currentArticle.getBody() != null){
-                        articles.add(currentArticle);
-                        incrementArtykulyCount();
-                    }
-                }
+
+                bufferedReader.close();
+
+            }catch (FileNotFoundException e){
+                System.out.println("Nie można otworzyć pliku");
+            }catch (IOException e){
+                e.printStackTrace();
             }
-            bufferedReader.close();
-        }catch (FileNotFoundException e){
-            System.out.println("Nie można otworzyć pliku");
-        }catch (IOException e){
-            e.printStackTrace();
         }
     }
 
-    private ArrayList<String> GetWordsFromSentence(String tekst){
-        String[] pom;
-        ArrayList<String> Rez = new ArrayList<>();
-        pom = tekst.split(" ");
-        Collections.addAll(Rez,pom);
-        Rez.removeAll(Arrays.asList("", null));
-        return Rez;
-    }
 }

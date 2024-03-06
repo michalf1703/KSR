@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 public class Article {
     private int id;
-    private LocalDateTime date;
     private String title;
     private String place;
     private String body;
@@ -16,9 +15,8 @@ public class Article {
 
     private ArrayList<String> tags;
 
-    public Article(int id, LocalDateTime date, String title, String place, String body){
+    public Article(int id, String title, String place, String body){
         this.id = id;
-        this.date = date;
         this.title = title;
         this.place = place;
         this.body = body;
@@ -34,9 +32,6 @@ public class Article {
         return id;
     }
 
-    public LocalDateTime getDate() {
-        return date;
-    }
 
     public String getTitle() {
         return title;
@@ -54,9 +49,6 @@ public class Article {
         this.id = id;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
 
     public void setTitle(String title) {
         this.title = title;
@@ -74,10 +66,9 @@ public class Article {
     public String toString() {
         return "Article(" +
                 "id='" + id + '\'' +
-                ", date=" + date +
-                ", title='" + title + '\'' +
-                ", place='" + place + '\'' +
-                ", body='" + body + '\'' +
+                "| title='" + title + '\'' +
+                "| place='" + place + '\'' +
+                "| body='" + body + '\'' +
                 ')';
     }
 }
