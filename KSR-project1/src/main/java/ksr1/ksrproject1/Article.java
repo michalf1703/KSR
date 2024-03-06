@@ -9,24 +9,14 @@ public class Article {
     private String place;
     private String body;
 
-    public ArrayList<String> getTags() {
-        return tags;
-    }
-
-    private ArrayList<String> tags;
 
     public Article(int id, String title, String place, String body){
         this.id = id;
         this.title = title;
         this.place = place;
         this.body = body;
-        this.tags = new ArrayList<>();
     }
 
-
-    public void setTags(ArrayList<String> tags) {
-        this.tags = tags;
-    }
 
     public int getId() {
         return id;

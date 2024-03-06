@@ -5,8 +5,8 @@ class App2
     public static void main( String[] args )
     {
         DataExtarctor dataExtarctor = new DataExtarctor();
-        dataExtarctor.readfromFile("PLACES");
-        System.out.println("Liczba artykułów: " + dataExtarctor.getArticles());
+        dataExtarctor.readFromFile();
+        System.out.println("Liczba artykułów: " + dataExtarctor.getArticlesCount());
         System.out.println("Koniec");
 
     }
