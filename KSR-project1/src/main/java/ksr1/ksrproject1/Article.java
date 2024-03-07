@@ -1,8 +1,5 @@
 package ksr1.ksrproject1;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-
 public class Article {
 
     private String title;
@@ -44,7 +41,7 @@ public class Article {
     @Override
     public String toString() {
         return "Article(" +
-                "| title='" + title + '\'' +
+                "title='" + title + '\'' +
                 "| place='" + place + '\'' +
                 "| body='" + body + '\'' +
                 ')';
