@@ -6,7 +6,7 @@ class App2
     {
         DataExtarctor dataExtarctor = new DataExtarctor();
         dataExtarctor.readFromFile();
-        System.out.println("Liczba artykułów: " + dataExtarctor.getArticlesCount());
+        System.out.println("Liczba artykułów z odpowiednią etykietą PLACE: " + dataExtarctor.getArticlesCount());
         System.out.println("Koniec");
 
     }

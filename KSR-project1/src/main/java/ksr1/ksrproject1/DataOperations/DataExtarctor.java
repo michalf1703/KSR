@@ -25,14 +25,11 @@ public class DataExtarctor {
         return numberOfArticles;
     }
 
-    public void readFromFile() { // Usunięcie parametru tag
-        ArrayList<String> tags;
+    public void readFromFile() {
         String title = "";
         String content = "";
         String place = "";
-        int id = 0;
-        Article currentArticle = new Article(id, "", "", "");
-
+        Article currentArticle = new Article("", "", "");
         boolean flag;
         try {
             String bufferLine;
@@ -40,11 +37,9 @@ public class DataExtarctor {
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             while ((bufferLine = bufferedReader.readLine()) != null) {
                 if (bufferLine.contains("<REUTERS ")) {
-                    currentArticle = new Article(id, "", "", "");
-                    tags = new ArrayList<>();
+                    currentArticle = new Article("", "", "");
                     do {
                         flag = true;
-                        id += 1;
                         int znacznikPoc = bufferLine.indexOf("<");
                         int znacznikKon = bufferLine.indexOf(">");
                         if (znacznikKon > znacznikPoc) {
@@ -60,12 +55,10 @@ public class DataExtarctor {
                             if (znacznikKon + 1 == znacznikPoc) {
                                 bufferLine = bufferLine.substring(znacznikPoc);
                             } else {
-                                tags.add(bufferLine.substring(znacznikKon + 1, znacznikPoc));
                                 bufferLine = bufferLine.substring(znacznikPoc);
                             }
                         }
                     } while (flag);
-
                 }
                 if (bufferLine.contains("<TITLE>")) {
                     int znacznikPoc = bufferLine.indexOf("<TITLE>");
@@ -92,7 +85,9 @@ public class DataExtarctor {
                     int znacznikPoc = bufferLine.indexOf("<PLACES>");
                     int znacznikKon = bufferLine.indexOf("</PLACES>");
                     place = bufferLine.substring(znacznikPoc + 8, znacznikKon);
-                    currentArticle.setPlace(place);
+                    if (isValidPlace(place)) {
+                        currentArticle.setPlace(place);
+                    }
                 }
                 if (bufferLine.contains("<BODY>")) {
                     int znacznikkon = bufferLine.indexOf("<BODY>");
@@ -109,22 +104,36 @@ public class DataExtarctor {
                 }
 
                 if (bufferLine.contains("</REUTERS>")) {
-                    if (currentArticle.getBody() != null) {
+                    if (currentArticle.getBody() != null && currentArticle.getPlace() != "") {
                         articles.add(currentArticle);
                         incrementArticlesCount();
-                        System.out.println(currentArticle.toString());
+                    } else {
+                        currentArticle = null;
                     }
                 }
 
             }
-
             bufferedReader.close();
-
         } catch (FileNotFoundException e) {
             System.out.println("Nie można otworzyć pliku");
         } catch (IOException e) {
             e.printStackTrace();
         }
+        displayArticles();
     }
 
+    private boolean isValidPlace(String place) {
+        return place.equals("<D>west-germany</D>") ||
+                place.equals("<D>japan</D>") ||
+                place.equals("<D>usa</D>") ||
+                place.equals("<D>france</D>") ||
+                place.equals("<D>uk</D>") ||
+                place.equals("<D>canada</D>");
+    }
+
+    public void displayArticles() {
+        for (Article article : articles) {
+            System.out.println(article.toString());
+        }
+    }
 }
