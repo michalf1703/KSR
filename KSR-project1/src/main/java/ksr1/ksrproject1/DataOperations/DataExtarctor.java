@@ -1,19 +1,22 @@
 package ksr1.ksrproject1.DataOperations;
 
 import ksr1.ksrproject1.Article;
+import ksr1.ksrproject1.ReadyArticle;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class DataExtarctor {
-    private ArrayList<Article> articles;
+    private ArrayList<ReadyArticle> readyArticles;
     private int numberOfArticles;
 
     public DataExtarctor() {
-        articles = new ArrayList<>();
+        readyArticles = new ArrayList<>();
         numberOfArticles = 0;
     }
 
@@ -31,7 +34,7 @@ public class DataExtarctor {
         String place = "";
         String dateline = "";
         String topic = "";
-        Article currentArticle = new Article("", "","", "", "");
+        Article currentArticle = new Article("", "", "", "", "");
         boolean flag;
         for (int i = 0; i <= 21; i++) {
             String numerPliku = String.format("%03d", i);
@@ -42,7 +45,7 @@ public class DataExtarctor {
                 BufferedReader bufferedReader = new BufferedReader(fileReader);
                 while ((bufferLine = bufferedReader.readLine()) != null) {
                     if (bufferLine.contains("<REUTERS ")) {
-                        currentArticle = new Article("","","","","");
+                        currentArticle = new Article("", "", "", "", "");
                         do {
                             flag = true;
                             int znacznikPoc = bufferLine.indexOf("<");
@@ -67,11 +70,11 @@ public class DataExtarctor {
                     }
                     if (bufferLine.contains("<TOPICS>")) {
                         int znacznikPoc = bufferLine.indexOf("<TOPICS>");
-                        int znacznikKon = bufferLine.indexOf("</TOPICS>"); 
+                        int znacznikKon = bufferLine.indexOf("</TOPICS>");
                         topic = bufferLine.substring(znacznikPoc + 8, znacznikKon);
                         topic = topic.replaceAll("</?D>", "");
                         currentArticle.setTopic(topic);
-                        }
+                    }
 
                     if (bufferLine.contains("<TITLE>")) {
                         int znacznikPoc = bufferLine.indexOf("<TITLE>");
@@ -175,7 +178,8 @@ public class DataExtarctor {
 
                     if (bufferLine.contains("</REUTERS>")) {
                         if (currentArticle.getBody() != null && currentArticle.getPlace() != "") {
-                            articles.add(currentArticle);
+                            ReadyArticle readyArticle = new ReadyArticle(currentArticle);
+                            readyArticles.add(readyArticle);
                             incrementArticlesCount();
                         } else {
                             currentArticle = null;
@@ -192,6 +196,7 @@ public class DataExtarctor {
             displayArticles();
         }
     }
+
     private boolean isValidPlace(String place) {
         return place.equals("west-germany") ||
                 place.equals("japan") ||
@@ -202,7 +207,7 @@ public class DataExtarctor {
     }
 
     public void displayArticles() {
-        for (Article article : articles) {
+        for (ReadyArticle article : readyArticles) {
             System.out.println(article.toString());
         }
     }

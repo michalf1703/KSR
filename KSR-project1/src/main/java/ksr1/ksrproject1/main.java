@@ -9,6 +9,7 @@ class App2
         System.out.println("Liczba artykułów z odpowiednią etykietą PLACE: " + dataExtarctor.getArticlesCount());
         System.out.println("Koniec");
 
+
     }
 
 }
