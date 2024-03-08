@@ -29,7 +29,9 @@ public class DataExtarctor {
         String title = "";
         String content = "";
         String place = "";
-        Article currentArticle = new Article("", "", "");
+        String dateline = "";
+        String topic = "";
+        Article currentArticle = new Article("", "","", "", "");
         boolean flag;
         for (int i = 0; i <= 21; i++) {
             String numerPliku = String.format("%03d", i);
@@ -40,7 +42,7 @@ public class DataExtarctor {
                 BufferedReader bufferedReader = new BufferedReader(fileReader);
                 while ((bufferLine = bufferedReader.readLine()) != null) {
                     if (bufferLine.contains("<REUTERS ")) {
-                        currentArticle = new Article("", "", "");
+                        currentArticle = new Article("","","","","");
                         do {
                             flag = true;
                             int znacznikPoc = bufferLine.indexOf("<");
@@ -63,6 +65,14 @@ public class DataExtarctor {
                             }
                         } while (flag);
                     }
+                    if (bufferLine.contains("<TOPICS>")) {
+                        int znacznikPoc = bufferLine.indexOf("<TOPICS>");
+                        int znacznikKon = bufferLine.indexOf("</TOPICS>"); 
+                        topic = bufferLine.substring(znacznikPoc + 8, znacznikKon);
+                        topic = topic.replaceAll("</?D>", "");
+                        currentArticle.setTopic(topic);
+                        }
+
                     if (bufferLine.contains("<TITLE>")) {
                         int znacznikPoc = bufferLine.indexOf("<TITLE>");
                         int znacznikKon = bufferLine.indexOf("</TITLE>");
@@ -85,6 +95,20 @@ public class DataExtarctor {
                         title = title.replaceAll("&lt;", "<");
                         currentArticle.setTitle(title);
                     }
+                    if (bufferLine.contains("<DATELINE>")) {
+                        int znacznikkon = bufferLine.indexOf("<DATELINE>");
+                        int znacznikpoc;
+                        bufferLine = bufferLine.substring(znacznikkon + 10);
+                        dateline = "";
+                        while (!bufferLine.contains("</DATELINE>")) {
+                            dateline = dateline + bufferLine + " ";
+                            bufferLine = bufferedReader.readLine();
+                        }
+                        znacznikpoc = bufferLine.indexOf("<");
+                        dateline = dateline + bufferLine.substring(0, znacznikpoc);
+                        currentArticle.setDateline(dateline);
+                    }
+
                     if (bufferLine.contains("<PLACES>")) {
                         int znacznikPoc = bufferLine.indexOf("<PLACES>");
                         int znacznikKon = bufferLine.indexOf("</PLACES>");
@@ -127,7 +151,7 @@ public class DataExtarctor {
                         content = content.replaceAll("&lt;", "<");
                         content = content.replaceAll("Reuter &#3;", "");
                         content = content.replaceAll("REUTER &#3;", "");
-                        content = content.trim(); // Usunięcie początkowych i końcowych białych znaków
+                        content = content.trim();
                         currentArticle.setBody(content);
                     }
                     if (bufferLine.contains("<TEXT TYPE=\"BRIEF\">")) {
@@ -144,7 +168,7 @@ public class DataExtarctor {
                         }
                         content = bodyBuilder.toString();
                         content = content.replaceAll("&lt;", "<");
-                        content = content.trim(); // Usunięcie początkowych i końcowych białych znaków
+                        content = content.trim();
                         currentArticle.setBody(content);
                     }
 
