@@ -17,8 +17,14 @@ public class ReadyArticle {
 
     private void extractWords(String text) {
         String[] wordsArray = text.split("\\s+");
-        Collections.addAll(words, wordsArray);
+        for (String word : wordsArray) {
+            word = word.replaceAll("[^a-zA-Z0-9]", "");
+            if (!word.isEmpty()) {
+                words.add(word);
+            }
+        }
     }
+
 
     public ArrayList<String> getWords() {
         return words;
