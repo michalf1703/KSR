@@ -7,9 +7,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class DataExtarctor {
     private ArrayList<ReadyArticle> readyArticles;
@@ -207,8 +206,32 @@ public class DataExtarctor {
     }
 
     public void displayArticles() {
+        ArrayList<String> stopList = loadStopList("C:\\Users\\Hp\\Documents\\GitHub\\KSR\\KSR-project1\\src\\main\\resources\\ dictionaries\\stop_words.txt");
         for (ReadyArticle article : readyArticles) {
+            // Aktualizacja listy słów w artykule o przefiltrowane słowa
+            article.setWords(removeWordsContainedInStopList(article.getWords(), stopList));
             System.out.println(article.toString());
         }
     }
+
+    private ArrayList<String> removeWordsContainedInStopList(ArrayList<String> words, ArrayList<String> stopList) {
+        return words.stream()
+                .filter(word -> !stopList.contains(word))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public ArrayList<String> loadStopList(String filePath) {
+        ArrayList<String> stopList = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                stopList.add(line.trim());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return stopList;
+    }
+
+
 }

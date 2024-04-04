@@ -6,6 +6,7 @@ class App2
     {
         DataExtarctor dataExtarctor = new DataExtarctor();
         dataExtarctor.readFromFile();
+        //dataExtarctor.filterArticlesWithStoplist("src/main/resources/stoplist.txt");
         System.out.println("Liczba artykułów z odpowiednią etykietą PLACE: " + dataExtarctor.getArticlesCount());
         System.out.println("Koniec");
 
