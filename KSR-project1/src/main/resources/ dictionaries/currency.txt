@@ -1,6 +1,9 @@
 dlr 
-austdlr 
-hk 
+austdlr
+eurodollar
+dollar
+hk
+franc
 singdlr
 nzdlr
 can

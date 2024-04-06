@@ -42,7 +42,6 @@ public class DataExtarctor {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Stop words: " + keyList);
         return keyList;
     }
     public void incrementArticlesCount() {
@@ -61,7 +60,7 @@ public class DataExtarctor {
         String topic = "";
         Article currentArticle = new Article("", "", "", "", "");
         boolean flag;
-        for (int i = 0; i <= 1; i++) {
+        for (int i = 0; i <= 0; i++) {
             String numerPliku = String.format("%03d", i);
             String nazwaPliku = "src/main/resources/documents/reut2-" + numerPliku + ".sgm";
             try {
@@ -256,37 +255,24 @@ public class DataExtarctor {
     }
 
     public void displayArticles() {
+        ArrayList<Vector<Object>> featureVectors = new ArrayList<>();
+        ArrayList<String> countryLabels = new ArrayList<>();
         ArrayList<String> stopList = loadStopList("C:\\Users\\Hp\\Documents\\GitHub\\KSR\\KSR-project1\\src\\main\\resources\\ dictionaries\\stop_words.txt");
         for (ReadyArticle article : readyArticles) {
             article.setWords(removeWordsContainedInStopList(article.getWords(), stopList));
             article.setWords(MakeWordsStemization(article.getWords()));
             System.out.println(article.toString());
-            double number = keywordFrequency.calculateFKey(article.getWords());
-            System.out.println("Liczba kluczowych słów: " + number);
-            double number2 = keywordFrequency20.calculateNKey20(article.getWords());
-            System.out.println("Liczba kluczowych słów20: " + number2);
-            ArrayList<String> title = article.getTitle();
-            System.out.println("Temat: " + title);
             double number3 = keywordFrequency.calculateFKey(article.getTitle());
-            System.out.println("Liczba kluczowych słów w tytule: " + number3);
-            String currency = mostCommonCurrency.calculateMostCommonCurrency(article.getWords());
-            System.out.println("Najczęściej występująca waluta: " + currency);
-            String country = mostCommonCountry.calculateMostCommonCountry(article.getWords());
-            System.out.println("Najczęściej występujący kraj: " + country);
-            String adjective = mostCommonAdjective.calculateMostCommonAdjective(article.getWords());
-            System.out.println("Najczęściej występujący przymiotnik: " + adjective);
-            String continent = mostCommonContinent.calculateMostCommonContinent(article.getWords());
-            System.out.println("Najczęściej występujący kontynent: " + continent);
-            String surname = mostCommonSurname.calculateMostCommonSurname(article.getWords());
-            System.out.println("Najczęściej występujące nazwisko: " + surname);
-            String exchange = mostCommonExchange.calculateMostCommonExchange(article.getWords());
-            System.out.println("Najczęściej występująca giełda: " + exchange);
+
             Vector<Object> features = featuresExtractor.extractFeatures(article.getWords());
             features.add(number3);
+            String countryLabel = article.getPlace();
+            countryLabels.add(countryLabel);
             for (Object feature : features) {
                 System.out.println(feature);
             }
-
+            //wektor z wektorami cech
+            featureVectors.add(features);
         }
     }
 
