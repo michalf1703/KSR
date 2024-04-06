@@ -1,8 +1,7 @@
 package ksr1.ksrproject1.DataOperations;
 
 import ksr1.ksrproject1.Article;
-import ksr1.ksrproject1.FeaturesEx.FeaturesExtractor;
-import ksr1.ksrproject1.FeaturesEx.KeywordFrequency;
+import ksr1.ksrproject1.FeaturesEx.*;
 import ksr1.ksrproject1.ReadyArticle;
 
 import java.io.BufferedReader;
@@ -15,6 +14,11 @@ import java.util.stream.Collectors;
 public class DataExtarctor {
     private ArrayList<ReadyArticle> readyArticles;
     private KeywordFrequency keywordFrequency = new KeywordFrequency();
+    private KeywordFrequency20 keywordFrequency20 = new KeywordFrequency20();
+    private MostCommonCurrency mostCommonCurrency = new MostCommonCurrency();
+    private MostCommonCountry mostCommonCountry = new MostCommonCountry();
+    private MostCommonAdjective mostCommonAdjective = new MostCommonAdjective();
+
     private int numberOfArticles;
 
     public DataExtarctor() {
@@ -215,6 +219,18 @@ public class DataExtarctor {
             System.out.println(article.toString());
             double number = keywordFrequency.calculateFKey(article.getWords());
             System.out.println("Liczba kluczowych słów: " + number);
+            double number2 = keywordFrequency20.calculateNKey20(article.getWords());
+            System.out.println("Liczba kluczowych słów20: " + number2);
+            ArrayList<String> title = article.getTitle();
+            System.out.println("Temat: " + title);
+            double number3 = keywordFrequency.calculateFKey(article.getTitle());
+            System.out.println("Liczba kluczowych słów w tytule: " + number3);
+            String currency = mostCommonCurrency.calculateMostCommonCurrency(article.getWords());
+            System.out.println("Najczęściej występująca waluta: " + currency);
+            String country = mostCommonCountry.calculateMostCommonCountry(article.getWords());
+            System.out.println("Najczęściej występujący kraj: " + country);
+            String adjective = mostCommonAdjective.calculateMostCommonAdjective(article.getWords());
+            System.out.println("Najczęściej występujący przymiotnik: " + adjective);
         }
     }
 
