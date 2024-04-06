@@ -1,6 +1,8 @@
 package ksr1.ksrproject1.DataOperations;
 
 import ksr1.ksrproject1.Article;
+import ksr1.ksrproject1.FeaturesEx.FeaturesExtractor;
+import ksr1.ksrproject1.FeaturesEx.KeywordFrequency;
 import ksr1.ksrproject1.ReadyArticle;
 
 import java.io.BufferedReader;
@@ -12,6 +14,7 @@ import java.util.stream.Collectors;
 
 public class DataExtarctor {
     private ArrayList<ReadyArticle> readyArticles;
+    private KeywordFrequency keywordFrequency = new KeywordFrequency();
     private int numberOfArticles;
 
     public DataExtarctor() {
@@ -35,7 +38,7 @@ public class DataExtarctor {
         String topic = "";
         Article currentArticle = new Article("", "", "", "", "");
         boolean flag;
-        for (int i = 0; i <= 21; i++) {
+        for (int i = 0; i <= 0; i++) {
             String numerPliku = String.format("%03d", i);
             String nazwaPliku = "src/main/resources/documents/reut2-" + numerPliku + ".sgm";
             try {
@@ -208,9 +211,10 @@ public class DataExtarctor {
     public void displayArticles() {
         ArrayList<String> stopList = loadStopList("C:\\Users\\Hp\\Documents\\GitHub\\KSR\\KSR-project1\\src\\main\\resources\\ dictionaries\\stop_words.txt");
         for (ReadyArticle article : readyArticles) {
-            // Aktualizacja listy słów w artykule o przefiltrowane słowa
             article.setWords(removeWordsContainedInStopList(article.getWords(), stopList));
             System.out.println(article.toString());
+            double number = keywordFrequency.calculateFKey(article.getWords());
+            System.out.println("Liczba kluczowych słów: " + number);
         }
     }
 
