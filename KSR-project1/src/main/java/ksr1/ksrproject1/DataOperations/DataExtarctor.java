@@ -18,6 +18,11 @@ public class DataExtarctor {
     private MostCommonCurrency mostCommonCurrency = new MostCommonCurrency();
     private MostCommonCountry mostCommonCountry = new MostCommonCountry();
     private MostCommonAdjective mostCommonAdjective = new MostCommonAdjective();
+    private MostCommonContinent mostCommonContinent = new MostCommonContinent();
+    private MostCommonSurname mostCommonSurname = new MostCommonSurname();
+    private MostCommonExchange mostCommonExchange = new MostCommonExchange();
+
+
 
     private int numberOfArticles;
 
@@ -231,6 +236,12 @@ public class DataExtarctor {
             System.out.println("Najczęściej występujący kraj: " + country);
             String adjective = mostCommonAdjective.calculateMostCommonAdjective(article.getWords());
             System.out.println("Najczęściej występujący przymiotnik: " + adjective);
+            String continent = mostCommonContinent.calculateMostCommonContinent(article.getWords());
+            System.out.println("Najczęściej występujący kontynent: " + continent);
+            String surname = mostCommonSurname.calculateMostCommonSurname(article.getWords());
+            System.out.println("Najczęściej występujące nazwisko: " + surname);
+            String exchange = mostCommonExchange.calculateMostCommonExchange(article.getWords());
+            System.out.println("Najczęściej występująca giełda: " + exchange);
         }
     }
 
