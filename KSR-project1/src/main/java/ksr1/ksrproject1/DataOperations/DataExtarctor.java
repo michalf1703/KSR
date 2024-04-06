@@ -21,7 +21,8 @@ public class DataExtarctor {
     private MostCommonContinent mostCommonContinent = new MostCommonContinent();
     private MostCommonSurname mostCommonSurname = new MostCommonSurname();
     private MostCommonExchange mostCommonExchange = new MostCommonExchange();
-
+    private FeaturesExtractor featuresExtractor = new FeaturesExtractor();
+    private List<String> stopWords;
 
 
     private int numberOfArticles;
@@ -29,8 +30,21 @@ public class DataExtarctor {
     public DataExtarctor() {
         readyArticles = new ArrayList<>();
         numberOfArticles = 0;
+        stopWords = loadKeyWordsList();
     }
-
+    private List<String> loadKeyWordsList() {
+        List<String> keyList = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/ dictionaries/keyWords.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                keyList.add(line.trim());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Stop words: " + keyList);
+        return keyList;
+    }
     public void incrementArticlesCount() {
         numberOfArticles++;
     }
@@ -47,7 +61,7 @@ public class DataExtarctor {
         String topic = "";
         Article currentArticle = new Article("", "", "", "", "");
         boolean flag;
-        for (int i = 0; i <= 0; i++) {
+        for (int i = 0; i <= 1; i++) {
             String numerPliku = String.format("%03d", i);
             String nazwaPliku = "src/main/resources/documents/reut2-" + numerPliku + ".sgm";
             try {
@@ -216,11 +230,36 @@ public class DataExtarctor {
                 place.equals("uk") ||
                 place.equals("canada");
     }
+    public ArrayList<String> MakeWordsStemization(ArrayList<String> words) {
+        PorterStemmer stemmer;
+        ArrayList<String> stemmWords = new ArrayList<>();
+        String stemmWord;
+
+        for (String w : words) {
+            // Sprawdź, czy słowo znajduje się na liście stop słów
+            if (stopWords.contains(w)) {
+                // Jeśli tak, pomijaj stemizację i dodaj oryginalne słowo do listy wynikowej
+                stemmWords.add(w);
+            } else {
+                // Jeśli nie, przeprowadź stemizację
+                stemmer = new PorterStemmer();
+                stemmer.add(w.toCharArray(), w.length());
+                stemmer.stem();
+                stemmWord = stemmer.toString();
+                if (stemmWord.length() > 1) {
+                    stemmWords.add(stemmWord);
+                }
+            }
+        }
+
+        return stemmWords;
+    }
 
     public void displayArticles() {
         ArrayList<String> stopList = loadStopList("C:\\Users\\Hp\\Documents\\GitHub\\KSR\\KSR-project1\\src\\main\\resources\\ dictionaries\\stop_words.txt");
         for (ReadyArticle article : readyArticles) {
             article.setWords(removeWordsContainedInStopList(article.getWords(), stopList));
+            article.setWords(MakeWordsStemization(article.getWords()));
             System.out.println(article.toString());
             double number = keywordFrequency.calculateFKey(article.getWords());
             System.out.println("Liczba kluczowych słów: " + number);
@@ -242,6 +281,12 @@ public class DataExtarctor {
             System.out.println("Najczęściej występujące nazwisko: " + surname);
             String exchange = mostCommonExchange.calculateMostCommonExchange(article.getWords());
             System.out.println("Najczęściej występująca giełda: " + exchange);
+            Vector<Object> features = featuresExtractor.extractFeatures(article.getWords());
+            features.add(number3);
+            for (Object feature : features) {
+                System.out.println(feature);
+            }
+
         }
     }
 

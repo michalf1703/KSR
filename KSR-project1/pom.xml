@@ -43,6 +43,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.apache.opennlp</groupId>
+            <artifactId>opennlp-tools</artifactId>
+            <version>1.9.3</version> <!-- Aktualna wersja -->
+        </dependency>
+        <dependency>
             <groupId>org.apache.maven.surefire</groupId>
             <artifactId>surefire-booter</artifactId>
             <version>2.21.0</version>

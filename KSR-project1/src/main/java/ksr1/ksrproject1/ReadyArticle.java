@@ -22,12 +22,14 @@ public class ReadyArticle {
     private void extractWords(String text) {
         String[] wordsArray = text.split("\\s+");
         for (String word : wordsArray) {
-            word = word.replaceAll("[^a-zA-Z0-9]", "");
+            // Usuń znaki inne niż litery i cyfry, a następnie zamień na małe litery
+            word = word.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
             if (!word.isEmpty()) {
                 words.add(word);
             }
         }
     }
+
 
     public ArrayList<String> getTitle() {
         return extractWordsFromTitle(this.title);
