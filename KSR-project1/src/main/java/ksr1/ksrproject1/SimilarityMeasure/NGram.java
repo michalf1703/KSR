@@ -31,7 +31,7 @@ public class NGram {
                 }
             }
 
-            return ((nominator / denominator) * occurNum);
+            return 1 - ((nominator / denominator) * occurNum);
         }
         return 0.0;
     }

@@ -4,7 +4,9 @@ import ksr1.ksrproject1.Article;
 import ksr1.ksrproject1.DataInstance;
 import ksr1.ksrproject1.FeaturesEx.*;
 import ksr1.ksrproject1.KNN;
+import ksr1.ksrproject1.Metrics.Chebyshev;
 import ksr1.ksrproject1.Metrics.Euclidean;
+import ksr1.ksrproject1.Metrics.Street;
 import ksr1.ksrproject1.ReadyArticle;
 import ksr1.ksrproject1.SimilarityMeasure.NGram;
 
@@ -259,12 +261,9 @@ public class DataExtarctor {
         String stemmWord;
 
         for (String w : words) {
-            // Sprawdź, czy słowo znajduje się na liście stop słów
             if (stopWords.contains(w)) {
-                // Jeśli tak, pomijaj stemizację i dodaj oryginalne słowo do listy wynikowej
                 stemmWords.add(w);
             } else {
-                // Jeśli nie, przeprowadź stemizację
                 stemmer = new PorterStemmer();
                 stemmer.add(w.toCharArray(), w.length());
                 stemmer.stem();
@@ -283,7 +282,7 @@ public class DataExtarctor {
         ArrayList<String> stopList = loadStopList("C:\\Users\\Hp\\Documents\\GitHub\\KSR\\KSR-project1\\src\\main\\resources\\ dictionaries\\stop_words.txt");
         for (ReadyArticle article : readyArticles) {
             article.setWords(removeWordsContainedInStopList(article.getWords(), stopList));
-           // article.setWords(MakeWordsStemization(article.getWords()));
+            article.setWords(MakeWordsStemization(article.getWords()));
             System.out.println(article.toString());
             double number3 = keywordFrequency.calculateFKey(article.getTitle());
             ArrayList<String> title = article.getTitle();
@@ -293,18 +292,20 @@ public class DataExtarctor {
             features.add(number3);
             String countryLabel = article.getPlace();
            // countryLabels.add(countryLabel);
-            for (Object feature : features) {
+          /*  for (Object feature : features) {
                 System.out.println(feature);
-            }
+            }*/
 
             DataInstance dataInstance = new DataInstance(features, countryLabel);
             dataInstances.add(dataInstance);
         }
 
-        List<List<DataInstance>> dataSets = DataInstance.splitDataSet(dataInstances, 0.8);
-        List<DataInstance> trainingSet = dataSets.get(0); // Zbiór treningowy
-        List<DataInstance> testSet = dataSets.get(1); // Zbiór testowy
+        List<List<DataInstance>> dataSets = DataInstance.splitDataSet(dataInstances, 0.5);
+        List<DataInstance> trainingSet = dataSets.get(0);
+        List<DataInstance> testSet = dataSets.get(1);
         Euclidean metric = new Euclidean();
+        Chebyshev metric2 = new Chebyshev();
+        Street metric3 = new Street();
         for(DataInstance dataInstance : trainingSet){
             System.out.println(dataInstance.getFeatureVector());
         }

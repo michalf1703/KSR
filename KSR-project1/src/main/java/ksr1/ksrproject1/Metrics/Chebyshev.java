@@ -1,5 +1,7 @@
 package ksr1.ksrproject1.Metrics;
 
+import ksr1.ksrproject1.SimilarityMeasure.NGram;
+
 import java.util.Vector;
 
 public class Chebyshev implements IMetric {
@@ -7,13 +9,9 @@ public class Chebyshev implements IMetric {
     @Override
     public Double CalculateDistance(Vector<Object> A, Vector<Object> B) {
         Double maxDifference = 0.0;
-
-        // Sprawdź, czy wektory mają taką samą długość
         if (A.size() != B.size()) {
             throw new IllegalArgumentException("Wektory muszą mieć taką samą długość");
         }
-
-        // Oblicz odległość Chebysheva między wektorami A i B
         for (int i = 0; i < A.size(); i++) {
             if (A.get(i) instanceof Double && B.get(i) instanceof Double) {
                 Double valueA = (Double) A.get(i);
@@ -22,8 +20,14 @@ public class Chebyshev implements IMetric {
                 if (difference > maxDifference) {
                     maxDifference = difference;
                 }
-            } else {
-                throw new IllegalArgumentException("Wektory muszą zawierać tylko liczby Double");
+            } else if (A.get(i) != null && B.get(i) != null) {
+                NGram nGram = new NGram();
+                String wordA = A.get(i).toString();
+                String wordB = B.get(i).toString();
+                Double similarity = nGram.calculateSimilarity(wordA, wordB);
+                if (similarity > maxDifference) {
+                    maxDifference = similarity;
+                }
             }
         }
 

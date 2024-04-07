@@ -9,13 +9,9 @@ public class Euclidean implements IMetric {
     @Override
     public Double CalculateDistance(Vector<Object> A, Vector<Object> B) {
         Double result = 0.0;
-
-        // Sprawdź, czy wektory mają taką samą długość
         if (A.size() != B.size()) {
             throw new IllegalArgumentException("Wektory muszą mieć taką samą długość");
         }
-
-        // Oblicz odległość euklidesową między wektorami A i B
         for (int i = 0; i < A.size(); i++) {
             Object valueA = A.get(i);
             Object valueB = B.get(i);
@@ -26,7 +22,6 @@ public class Euclidean implements IMetric {
                     Double doubleB = (Double) valueB;
                     result += Math.pow((doubleA - doubleB), 2);
                 } else {
-                    // Jeśli wartości nie są liczbami typu Double, użyj metody n-gram
                     NGram nGram = new NGram();
                     String wordA = valueA.toString();
                     String wordB = valueB.toString();
@@ -34,7 +29,7 @@ public class Euclidean implements IMetric {
                 }
             }
         }
-
+        //System.out.println("Euclidean distance: " + Math.sqrt(result));
         return Math.sqrt(result);
     }
 }
