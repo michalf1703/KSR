@@ -1,18 +1,38 @@
 package ksr1.ksrproject1.Metrics;
 
+import ksr1.ksrproject1.SimilarityMeasure.NGram;
 
-import java.util.ArrayList;
-import java.lang.Math;
+import java.util.Vector;
 
-public class Euclidean implements IMetric{
+public class Euclidean implements IMetric {
 
     @Override
-    public Double CalculateDistance(ArrayList<Double> A, ArrayList<Double> B) {
+    public Double CalculateDistance(Vector<Object> A, Vector<Object> B) {
         Double result = 0.0;
 
-        for (int i = 0; i < A.size(); i++)
-        {
-            result += Math.pow((A.get(i) - B.get(i)), 2);
+        // Sprawdź, czy wektory mają taką samą długość
+        if (A.size() != B.size()) {
+            throw new IllegalArgumentException("Wektory muszą mieć taką samą długość");
+        }
+
+        // Oblicz odległość euklidesową między wektorami A i B
+        for (int i = 0; i < A.size(); i++) {
+            Object valueA = A.get(i);
+            Object valueB = B.get(i);
+
+            if (valueA != null && valueB != null) {
+                if (valueA instanceof Double && valueB instanceof Double) {
+                    Double doubleA = (Double) valueA;
+                    Double doubleB = (Double) valueB;
+                    result += Math.pow((doubleA - doubleB), 2);
+                } else {
+                    // Jeśli wartości nie są liczbami typu Double, użyj metody n-gram
+                    NGram nGram = new NGram();
+                    String wordA = valueA.toString();
+                    String wordB = valueB.toString();
+                    result += Math.pow((nGram.calculateSimilarity(wordA, wordB)), 2);
+                }
+            }
         }
 
         return Math.sqrt(result);

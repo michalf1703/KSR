@@ -1,7 +1,10 @@
 package ksr1.ksrproject1.DataOperations;
 
 import ksr1.ksrproject1.Article;
+import ksr1.ksrproject1.DataInstance;
 import ksr1.ksrproject1.FeaturesEx.*;
+import ksr1.ksrproject1.KNN;
+import ksr1.ksrproject1.Metrics.Euclidean;
 import ksr1.ksrproject1.ReadyArticle;
 
 import java.io.BufferedReader;
@@ -21,6 +24,7 @@ public class DataExtarctor {
     private MostCommonContinent mostCommonContinent = new MostCommonContinent();
     private MostCommonSurname mostCommonSurname = new MostCommonSurname();
     private MostCommonExchange mostCommonExchange = new MostCommonExchange();
+    private DataInstance dataInstance;
     private FeaturesExtractor featuresExtractor = new FeaturesExtractor();
     private List<String> stopWords;
 
@@ -60,7 +64,7 @@ public class DataExtarctor {
         String topic = "";
         Article currentArticle = new Article("", "", "", "", "");
         boolean flag;
-        for (int i = 0; i <= 0; i++) {
+        for (int i = 1; i <= 2; i++) {
             String numerPliku = String.format("%03d", i);
             String nazwaPliku = "src/main/resources/documents/reut2-" + numerPliku + ".sgm";
             try {
@@ -255,24 +259,50 @@ public class DataExtarctor {
     }
 
     public void displayArticles() {
-        ArrayList<Vector<Object>> featureVectors = new ArrayList<>();
-        ArrayList<String> countryLabels = new ArrayList<>();
+        ArrayList<DataInstance> dataInstances = new ArrayList<>();
         ArrayList<String> stopList = loadStopList("C:\\Users\\Hp\\Documents\\GitHub\\KSR\\KSR-project1\\src\\main\\resources\\ dictionaries\\stop_words.txt");
         for (ReadyArticle article : readyArticles) {
             article.setWords(removeWordsContainedInStopList(article.getWords(), stopList));
             article.setWords(MakeWordsStemization(article.getWords()));
-            System.out.println(article.toString());
+           // System.out.println(article.toString());
             double number3 = keywordFrequency.calculateFKey(article.getTitle());
 
             Vector<Object> features = featuresExtractor.extractFeatures(article.getWords());
             features.add(number3);
             String countryLabel = article.getPlace();
-            countryLabels.add(countryLabel);
-            for (Object feature : features) {
-                System.out.println(feature);
+           // countryLabels.add(countryLabel);
+            //for (Object feature : features) {
+             //   System.out.println(feature);
+            //}
+
+            DataInstance dataInstance = new DataInstance(features, countryLabel);
+            dataInstances.add(dataInstance);
+        }
+        List<List<DataInstance>> dataSets = DataInstance.splitDataSet(dataInstances, 0.6);
+        List<DataInstance> trainingSet = dataSets.get(0); // Zbiór treningowy
+        List<DataInstance> testSet = dataSets.get(1); // Zbiór testowy
+        Euclidean metric = new Euclidean();
+        for(DataInstance dataInstance : trainingSet){
+            System.out.println(dataInstance.getFeatureVector());
+        }
+        for(DataInstance dataInstance : testSet){
+            System.out.println(dataInstance.getFeatureVector());
+        }
+        System.out.println("Liczba danych treningowych: " + trainingSet.size());
+        System.out.println("Liczba danych testowych: " + testSet.size());
+
+        int k = 5; // Liczba sąsiadów
+        KNN knn = new KNN(trainingSet, metric, k); // Ustaw metrykę i liczbę sąsiadów
+        int correctPredictions = 0;
+        for (DataInstance testData : testSet) {
+            String predictedLabel = knn.classify(testData.getFeatureVector());
+            String actualLabel = testData.getCountryLabel();
+            System.out.println("Rzeczywista etykieta: " + actualLabel + ", Przewidziana etykieta: " + predictedLabel);
+            if (predictedLabel.equals(actualLabel)) {
+                correctPredictions++;
             }
-            //wektor z wektorami cech
-            featureVectors.add(features);
+            double accuracy = (double) correctPredictions / testSet.size() * 100;
+            System.out.println("Dokładność klasyfikacji: " + accuracy + "%");
         }
     }
 

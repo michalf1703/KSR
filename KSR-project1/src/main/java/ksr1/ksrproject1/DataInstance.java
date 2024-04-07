@@ -22,20 +22,27 @@ public class DataInstance {
         return countryLabel;
     }
 
-    // Metoda do losowego przemieszania instancji danych
     public static void shuffleDataInstances(List<DataInstance> dataInstances) {
         Collections.shuffle(dataInstances);
     }
 
     // Metoda do podziału danych na zbiór treningowy i testowy
-    public static List<DataInstance> splitDataSet(List<DataInstance> dataInstances, double trainingRatio) {
+    public static List<List<DataInstance>> splitDataSet(List<DataInstance> dataInstances, double trainingRatio) {
         int totalSize = dataInstances.size();
         int trainingSize = (int) (totalSize * trainingRatio);
+
+        // Losowo przemieszaj dane
+        shuffleDataInstances(dataInstances);
 
         // Podziel dane na zbiór treningowy i testowy
         List<DataInstance> trainingSet = dataInstances.subList(0, trainingSize);
         List<DataInstance> testSet = dataInstances.subList(trainingSize, totalSize);
 
-        return trainingSet;
+        List<List<DataInstance>> result = new ArrayList<>();
+        result.add(trainingSet);
+        result.add(testSet);
+
+        return result;
     }
+
 }
