@@ -42,9 +42,9 @@ antarctica
 africa
 europe
 America
-north america
+north-america
 australia
-south america
+south-america
 afghanistan
 albania 
 algeria 
@@ -646,6 +646,7 @@ emirati
 ugandan
 british
 uruguayan
+us
 us-virgin-islander
 american
 soviet

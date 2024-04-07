@@ -15,6 +15,8 @@ public class ReadyArticle {
         this.place = article.getPlace();
         extractWords(article.getTopic());
         extractWords(article.getTitle());
+        extractWords(article.getPeople());
+        extractWords(article.getExchange());
         extractWords(article.getDateline());
         extractWords(article.getBody());
     }
@@ -29,7 +31,7 @@ public class ReadyArticle {
 
         for (int i = 0; i < wordsArray.length; i++) {
             String word = wordsArray[i];
-            word = word.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+            word = word.replaceAll("[^a-zA-Z]", "").toLowerCase();
             if (!word.isEmpty()) {
 
                 if (word.equals("west")) {
@@ -45,6 +47,7 @@ public class ReadyArticle {
         }
     }
 
+
     public ArrayList<String> getTitle() {
         return extractWordsFromTitle(this.title);
     }
@@ -53,7 +56,7 @@ public class ReadyArticle {
         ArrayList<String> titleWords = new ArrayList<>();
         String[] wordsArray = title.split("\\s+");
         for (String word : wordsArray) {
-            word = word.replaceAll("[^a-zA-Z0-9]", "");
+            word = word.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
             if (!word.isEmpty()) {
                 titleWords.add(word);
             }

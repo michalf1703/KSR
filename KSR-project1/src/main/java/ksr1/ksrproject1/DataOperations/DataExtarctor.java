@@ -6,6 +6,7 @@ import ksr1.ksrproject1.FeaturesEx.*;
 import ksr1.ksrproject1.KNN;
 import ksr1.ksrproject1.Metrics.Euclidean;
 import ksr1.ksrproject1.ReadyArticle;
+import ksr1.ksrproject1.SimilarityMeasure.NGram;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -62,9 +63,11 @@ public class DataExtarctor {
         String place = "";
         String dateline = "";
         String topic = "";
-        Article currentArticle = new Article("", "", "", "", "");
+        String exchange = "";
+        //String people = "";
+        Article currentArticle = new Article("", "","","", "", "", "");
         boolean flag;
-        for (int i = 1; i <= 2; i++) {
+        for (int i = 1; i <= 21; i++) {
             String numerPliku = String.format("%03d", i);
             String nazwaPliku = "src/main/resources/documents/reut2-" + numerPliku + ".sgm";
             try {
@@ -73,7 +76,7 @@ public class DataExtarctor {
                 BufferedReader bufferedReader = new BufferedReader(fileReader);
                 while ((bufferLine = bufferedReader.readLine()) != null) {
                     if (bufferLine.contains("<REUTERS ")) {
-                        currentArticle = new Article("", "", "", "", "");
+                        currentArticle = new Article("", "", "","","", "", "");
                         do {
                             flag = true;
                             int znacznikPoc = bufferLine.indexOf("<");
@@ -126,6 +129,22 @@ public class DataExtarctor {
                         title = title.replaceAll("&lt;", "<");
                         currentArticle.setTitle(title);
                     }
+                    if (bufferLine.contains("<EXCHANGES>")) {
+                        int znacznikPoc = bufferLine.indexOf("<EXCHANGES>");
+                        int znacznikKon = bufferLine.indexOf("</EXCHANGES>");
+                        String exchanges = bufferLine.substring(znacznikPoc + 11, znacznikKon);
+                        exchanges = exchanges.replaceAll("</?D>", "");
+                        currentArticle.setExchange(exchanges);
+                    }
+                    if (bufferLine.contains("<PEOPLE>")) {
+                        int znacznikPoc = bufferLine.indexOf("<PEOPLE>");
+                        int znacznikKon = bufferLine.indexOf("</PEOPLE>");
+                        String people = bufferLine.substring(znacznikPoc + 8, znacznikKon);
+                        people = people.replaceAll("</?D>", "");
+                        currentArticle.setPeople(people);
+                    }
+
+
                     if (bufferLine.contains("<DATELINE>")) {
                         int znacznikkon = bufferLine.indexOf("<DATELINE>");
                         int znacznikpoc;
@@ -149,6 +168,7 @@ public class DataExtarctor {
                             currentArticle.setPlace(place);
                         }
                     }
+
                     if (bufferLine.contains("<BODY>")) {
                         int znacznikkon = bufferLine.indexOf("<BODY>");
                         int znacznikpoc;
@@ -221,8 +241,8 @@ public class DataExtarctor {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            displayArticles();
         }
+        displayArticles();
     }
 
     private boolean isValidPlace(String place) {
@@ -263,22 +283,25 @@ public class DataExtarctor {
         ArrayList<String> stopList = loadStopList("C:\\Users\\Hp\\Documents\\GitHub\\KSR\\KSR-project1\\src\\main\\resources\\ dictionaries\\stop_words.txt");
         for (ReadyArticle article : readyArticles) {
             article.setWords(removeWordsContainedInStopList(article.getWords(), stopList));
-            article.setWords(MakeWordsStemization(article.getWords()));
-           // System.out.println(article.toString());
+           // article.setWords(MakeWordsStemization(article.getWords()));
+            System.out.println(article.toString());
             double number3 = keywordFrequency.calculateFKey(article.getTitle());
+            ArrayList<String> title = article.getTitle();
+            //System.out.println("Temat: " + title);
 
             Vector<Object> features = featuresExtractor.extractFeatures(article.getWords());
             features.add(number3);
             String countryLabel = article.getPlace();
            // countryLabels.add(countryLabel);
-            //for (Object feature : features) {
-             //   System.out.println(feature);
-            //}
+            for (Object feature : features) {
+                System.out.println(feature);
+            }
 
             DataInstance dataInstance = new DataInstance(features, countryLabel);
             dataInstances.add(dataInstance);
         }
-        List<List<DataInstance>> dataSets = DataInstance.splitDataSet(dataInstances, 0.6);
+
+        List<List<DataInstance>> dataSets = DataInstance.splitDataSet(dataInstances, 0.8);
         List<DataInstance> trainingSet = dataSets.get(0); // Zbiór treningowy
         List<DataInstance> testSet = dataSets.get(1); // Zbiór testowy
         Euclidean metric = new Euclidean();
@@ -288,22 +311,25 @@ public class DataExtarctor {
         for(DataInstance dataInstance : testSet){
             System.out.println(dataInstance.getFeatureVector());
         }
-        System.out.println("Liczba danych treningowych: " + trainingSet.size());
-        System.out.println("Liczba danych testowych: " + testSet.size());
+       // System.out.println("Liczba danych treningowych: " + trainingSet.size());
+        //System.out.println("Liczba danych testowych: " + testSet.size());
 
-        int k = 5; // Liczba sąsiadów
+        int k = 10; // Liczba sąsiadów
         KNN knn = new KNN(trainingSet, metric, k); // Ustaw metrykę i liczbę sąsiadów
         int correctPredictions = 0;
         for (DataInstance testData : testSet) {
             String predictedLabel = knn.classify(testData.getFeatureVector());
             String actualLabel = testData.getCountryLabel();
-            System.out.println("Rzeczywista etykieta: " + actualLabel + ", Przewidziana etykieta: " + predictedLabel);
+          //  System.out.println("Rzeczywista etykieta: " + actualLabel + ", Przewidziana etykieta: " + predictedLabel);
             if (predictedLabel.equals(actualLabel)) {
                 correctPredictions++;
             }
-            double accuracy = (double) correctPredictions / testSet.size() * 100;
-            System.out.println("Dokładność klasyfikacji: " + accuracy + "%");
+
         }
+        double accuracy = (double) correctPredictions / testSet.size() * 100;
+        System.out.println("Dokładność klasyfikacji: " + accuracy + "%");
+
+
     }
 
     private ArrayList<String> removeWordsContainedInStopList(ArrayList<String> words, ArrayList<String> stopList) {

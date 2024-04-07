@@ -2,6 +2,6 @@ asia
 antarctica
 africa
 europe
-north america
+north-america
 australia
-south america
+south-america

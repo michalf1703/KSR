@@ -7,12 +7,31 @@ public class Article {
     private String body;
     private String dateline;
     private String topic;
+    private String exchange;
+    private String people;
 
 
+    public String getExchange() {
+        return exchange;
+    }
 
-    public Article(String topic, String title, String dateline, String place, String body){
+    public void setExchange(String exchange) {
+        this.exchange = exchange;
+    }
+
+    public String getPeople() {
+        return people;
+    }
+
+    public void setPeople(String people) {
+        this.people = people;
+    }
+
+    public Article(String topic, String title, String exchange, String people, String dateline, String place, String body){
         this.topic = topic;
         this.title = title;
+        this.exchange = exchange;
+        this.people = people;
         this.dateline = dateline;
         this.place = place;
         this.body = body;
