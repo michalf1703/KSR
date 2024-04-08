@@ -69,7 +69,7 @@ public class DataExtarctor {
         //String people = "";
         Article currentArticle = new Article("", "","","", "", "", "");
         boolean flag;
-        for (int i = 1; i <= 21; i++) {
+        for (int i = 0; i <= 0; i++) {
             String numerPliku = String.format("%03d", i);
             String nazwaPliku = "src/main/resources/documents/reut2-" + numerPliku + ".sgm";
             try {
@@ -236,6 +236,7 @@ public class DataExtarctor {
                         }
                     }
 
+
                 }
                 bufferedReader.close();
             } catch (FileNotFoundException e) {
@@ -244,7 +245,7 @@ public class DataExtarctor {
                 e.printStackTrace();
             }
         }
-        displayArticles();
+       // displayArticles();
     }
 
     private boolean isValidPlace(String place) {
@@ -291,7 +292,6 @@ public class DataExtarctor {
             Vector<Object> features = featuresExtractor.extractFeatures(article.getWords());
             features.add(number3);
             String countryLabel = article.getPlace();
-           // countryLabels.add(countryLabel);
           /*  for (Object feature : features) {
                 System.out.println(feature);
             }*/
@@ -315,7 +315,7 @@ public class DataExtarctor {
        // System.out.println("Liczba danych treningowych: " + trainingSet.size());
         //System.out.println("Liczba danych testowych: " + testSet.size());
 
-        int k = 10; // Liczba sąsiadów
+        int k = 2; // Liczba sąsiadów
         KNN knn = new KNN(trainingSet, metric, k); // Ustaw metrykę i liczbę sąsiadów
         int correctPredictions = 0;
         for (DataInstance testData : testSet) {
