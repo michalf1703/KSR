@@ -1,5 +1,9 @@
 package ksr1.ksrproject1;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Article {
 
     private String title;
@@ -84,5 +88,21 @@ public class Article {
                 "| dateline='" + dateline + '\'' +
                 "| body='" + body + '\'' +
                 ')';
+    }
+
+    public ArrayList<String> extractWordsFromBody() {
+        if (body == null || body.isEmpty()) {
+            return new ArrayList<>();
+        }
+        String[] wordsArray = body.split("\\s+");
+
+        return new ArrayList<>(Arrays.asList(wordsArray));
+    }
+
+    public String concatenateWords(ArrayList<String> words) {
+        if (words == null || words.isEmpty()) {
+            return "";
+        }
+        return String.join(" ", words);
     }
 }

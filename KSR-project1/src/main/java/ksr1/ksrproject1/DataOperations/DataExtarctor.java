@@ -27,6 +27,8 @@ public class DataExtarctor {
     private MostCommonContinent mostCommonContinent = new MostCommonContinent();
     private MostCommonSurname mostCommonSurname = new MostCommonSurname();
     private MostCommonExchange mostCommonExchange = new MostCommonExchange();
+    ArrayList<String> stopList = loadStopList("C:\\Users\\Hp\\Documents\\GitHub\\KSR\\KSR-project1\\src\\main\\resources\\ dictionaries\\stop_words.txt");
+    private WCapitalFeature wCapitalFeature = new WCapitalFeature();
     private DataInstance dataInstance;
     private FeaturesExtractor featuresExtractor = new FeaturesExtractor();
     private List<String> stopWords;
@@ -69,7 +71,7 @@ public class DataExtarctor {
         //String people = "";
         Article currentArticle = new Article("", "","","", "", "", "");
         boolean flag;
-        for (int i = 0; i <= 0; i++) {
+        for (int i = 1; i <= 21; i++) {
             String numerPliku = String.format("%03d", i);
             String nazwaPliku = "src/main/resources/documents/reut2-" + numerPliku + ".sgm";
             try {
@@ -231,6 +233,11 @@ public class DataExtarctor {
                             ReadyArticle readyArticle = new ReadyArticle(currentArticle);
                             readyArticles.add(readyArticle);
                             incrementArticlesCount();
+                            ArrayList<String> bodyList = currentArticle.extractWordsFromBody();
+                            ArrayList<String> words = removeWordsContainedInStopList(bodyList, stopList);
+                            String body = currentArticle.concatenateWords(words);
+                            double wynik = wCapitalFeature.calculateWCapital(body);
+                            readyArticle.setWCapital(wynik);
                         } else {
                             currentArticle = null;
                         }
@@ -238,6 +245,7 @@ public class DataExtarctor {
 
 
                 }
+
                 bufferedReader.close();
             } catch (FileNotFoundException e) {
                 System.out.println("Nie można otworzyć pliku");
@@ -245,7 +253,7 @@ public class DataExtarctor {
                 e.printStackTrace();
             }
         }
-       // displayArticles();
+        displayArticles();
     }
 
     private boolean isValidPlace(String place) {
@@ -280,17 +288,20 @@ public class DataExtarctor {
 
     public void displayArticles() {
         ArrayList<DataInstance> dataInstances = new ArrayList<>();
-        ArrayList<String> stopList = loadStopList("C:\\Users\\Hp\\Documents\\GitHub\\KSR\\KSR-project1\\src\\main\\resources\\ dictionaries\\stop_words.txt");
         for (ReadyArticle article : readyArticles) {
             article.setWords(removeWordsContainedInStopList(article.getWords(), stopList));
+            //System.out.println(stopList.toString());
             article.setWords(MakeWordsStemization(article.getWords()));
             System.out.println(article.toString());
             double number3 = keywordFrequency.calculateFKey(article.getTitle());
+            double number4 = article.getWCapital();
             ArrayList<String> title = article.getTitle();
             //System.out.println("Temat: " + title);
+            System.out.println("Cecha WCapital: " + article.getWCapital());
 
             Vector<Object> features = featuresExtractor.extractFeatures(article.getWords());
             features.add(number3);
+            features.add(number4);
             String countryLabel = article.getPlace();
           /*  for (Object feature : features) {
                 System.out.println(feature);
@@ -315,7 +326,7 @@ public class DataExtarctor {
        // System.out.println("Liczba danych treningowych: " + trainingSet.size());
         //System.out.println("Liczba danych testowych: " + testSet.size());
 
-        int k = 2; // Liczba sąsiadów
+        int k = 10; // Liczba sąsiadów
         KNN knn = new KNN(trainingSet, metric, k); // Ustaw metrykę i liczbę sąsiadów
         int correctPredictions = 0;
         for (DataInstance testData : testSet) {
@@ -344,7 +355,9 @@ public class DataExtarctor {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                stopList.add(line.trim());
+                String word = line.trim();
+                stopList.add(word);
+                stopList.add(Character.toUpperCase(word.charAt(0)) + word.substring(1).toLowerCase());
             }
         } catch (IOException e) {
             e.printStackTrace();

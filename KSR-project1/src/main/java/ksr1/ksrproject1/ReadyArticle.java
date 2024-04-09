@@ -7,12 +7,22 @@ import java.util.ArrayList;
 public class ReadyArticle {
     private String title;
     private ArrayList<String> words;
-    private String place; // Dodaj pole przechowujące miejsce
+    private String place;
+    private double WCapital;
+
+    public double getWCapital() {
+        return WCapital;
+    }
+
+    public void setWCapital(double WCapital) {
+        this.WCapital = WCapital;
+    }
 
     public ReadyArticle(Article article) {
         this.words = new ArrayList<>();
         this.title = article.getTitle();
         this.place = article.getPlace();
+        this.WCapital = 0;
         extractWords(article.getTopic());
         extractWords(article.getTitle());
         extractWords(article.getPeople());
@@ -74,6 +84,6 @@ public class ReadyArticle {
 
     @Override
     public String toString() {
-        return "ReadyArticle" + words;
+        return "" + words;
     }
 }
