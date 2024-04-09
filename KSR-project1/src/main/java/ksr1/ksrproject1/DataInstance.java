@@ -32,7 +32,7 @@ public class DataInstance {
         int trainingSize = (int) (totalSize * trainingRatio);
 
         // Losowo przemieszaj dane
-        shuffleDataInstances(dataInstances);
+       // shuffleDataInstances(dataInstances);
 
         // Podziel dane na zbiór treningowy i testowy
         List<DataInstance> trainingSet = dataInstances.subList(0, trainingSize);
