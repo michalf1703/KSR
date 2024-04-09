@@ -71,7 +71,7 @@ public class DataExtarctor {
         //String people = "";
         Article currentArticle = new Article("", "","","", "", "", "");
         boolean flag;
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 1; i <= 21; i++) {
             String numerPliku = String.format("%03d", i);
             String nazwaPliku = "src/main/resources/documents/reut2-" + numerPliku + ".sgm";
             try {
@@ -318,7 +318,7 @@ public class DataExtarctor {
        // System.out.println("Liczba danych treningowych: " + trainingSet.size());
         //System.out.println("Liczba danych testowych: " + testSet.size());
 
-        int k = 8; // Liczba sąsiadów
+        int k = 4; // Liczba sąsiadów
         KNN knn = new KNN(trainingSet, metric, k); // Ustaw metrykę i liczbę sąsiadów
         int correctPredictions = 0;
         int correctUSA = 0;
@@ -427,7 +427,7 @@ public class DataExtarctor {
         double f1France = 2 * (precisionFrance * recallFrance) / (precisionFrance + recallFrance);
         double f1Germany = 2 * (precisionGermany * recallGermany) / (precisionGermany + recallGermany);
         double f1Canada = 2 * (precisionCanada * recallCanada) / (precisionCanada + recallCanada);
-        double f1 = 2 * (f1Usa*usaSize + f1Uk*ukSize + f1Japan*japanSize + f1France*franceSize + f1Germany*germanySize + f1Canada*canadaSize)/testSet.size();
+        double f1 = (f1Usa*usaSize + f1Uk*ukSize + f1Japan*japanSize + f1France*franceSize + f1Germany*germanySize + f1Canada*canadaSize)/testSet.size();
         System.out.println("Dokładność klasyfikacji(accuracy): " + accuracy + "%");
         System.out.println("Precyzja klasyfikacji dla calej klasyfikacji: " + precision + "%");
         System.out.println("Czułość klasyfikacji dla calej klasyfikacji: " + recall + "%");
