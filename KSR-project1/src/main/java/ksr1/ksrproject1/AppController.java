@@ -68,9 +68,11 @@ public class AppController {
     protected void onStartButtonClick() {
         int k = Integer.parseInt(fillK.getText());
         double set = Double.parseDouble(testingSetField.getText());
-        DataExtarctor dataExtarctor = new DataExtarctor(k, metric, set,featuresIndexes);
-        dataExtarctor.readFromFile();
-        System.out.println("Liczba artykułów z odpowiednią etykietą PLACE: " + dataExtarctor.getArticlesCount());
+        DataExtarctor dataExtarctor = new DataExtarctor();
+        ArrayList<ReadyArticle> readyArticles = dataExtarctor.readFromFile();
+        Classifier classifier = new Classifier(k,metric,set, featuresIndexes);
+        classifier.start(readyArticles);
+       // System.out.println("Liczba artykułów z odpowiednią etykietą PLACE: " + dataExtarctor.getArticlesCount());
 
     }
 
