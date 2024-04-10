@@ -13,76 +13,41 @@ import java.util.List;
 
 public class AppController {
     @FXML
-    private Label welcomeText;
-    @FXML
-    private CheckBox KeywordIn20;
+    private CheckBox KeywordIn20, keyWordFreqFeature, keyWordInAllFeature, mostAdjectiveFeature,
+            mostCountryFeatrue, mostContinentFeature, mostCurrencyFeature,
+            mostExeFeatrue, mostKeyWordInTitleFeature, mostSurnameFeature;
 
     @FXML
     private ChoiceBox<String> choiceMetric;
 
     @FXML
-    private TextField fillK;
-
-    @FXML
-    private CheckBox keyWordFreqFeature;
-
-    @FXML
-    private CheckBox keyWordInAllFeature;
-
-    @FXML
-    private CheckBox mostAdjectiveFeature;
-
-    @FXML
-    private CheckBox mostCountryFeatrue;
-
-    @FXML
-    private CheckBox mostCountryFeature;
-
-    @FXML
-    private CheckBox mostCurrencyFeature;
-
-    @FXML
-    private CheckBox mostExeFeatrue;
-
-    @FXML
-    private CheckBox mostKeyWordInTitleFeature;
-
-    @FXML
-    private CheckBox mostSurnameFeature;
-
-    @FXML
-    private TextField testingSetField;
-    @FXML
-    private Button startButton;
+    private TextField fillK, testingSetField;
 
     private String [] metrics = {"Metryka Euklidesowa", "Metryka Czebyszewa", "Metryka Uliczna"};
     private List<Integer> featuresIndexes;
     private IMetric metric;
-    @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
-    }
+
 
     @FXML
     protected void initialize() {
         choiceMetric.getItems().addAll(metrics);
-        choiceMetric.setValue(metrics[0]);
         fillK.setText("5");
 
         // Inicjalizujemy listę featuresIndexes
         featuresIndexes = new ArrayList<>();
 
         // Dodajemy słuchaczy do pól CheckBox
-        addCheckboxListener(KeywordIn20, 0);
+        addCheckboxListener(keyWordInAllFeature, 0);
         addCheckboxListener(keyWordFreqFeature, 1);
-        addCheckboxListener(keyWordInAllFeature, 2);
-        addCheckboxListener(mostAdjectiveFeature, 3);
-        addCheckboxListener(mostCountryFeatrue, 4);
-        addCheckboxListener(mostCountryFeature, 5);
-        addCheckboxListener(mostCurrencyFeature, 6);
+        addCheckboxListener(mostCurrencyFeature, 2);
+        addCheckboxListener(KeywordIn20, 3);
+        addCheckboxListener(mostAdjectiveFeature, 4);
+        addCheckboxListener(mostCountryFeatrue, 5);
+        addCheckboxListener(mostSurnameFeature, 6);
         addCheckboxListener(mostExeFeatrue, 7);
-        addCheckboxListener(mostKeyWordInTitleFeature, 8);
-        addCheckboxListener(mostSurnameFeature, 9);
+        addCheckboxListener(mostContinentFeature, 8);
+        addCheckboxListener(mostKeyWordInTitleFeature, 9);
+
 
         // Dodajemy słuchacza do pola ChoiceBox
         choiceMetric.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {

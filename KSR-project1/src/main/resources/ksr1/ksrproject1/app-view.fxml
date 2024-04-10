@@ -23,7 +23,7 @@
       <CheckBox fx:id="mostCountryFeatrue" layoutX="26.0" layoutY="241.0" mnemonicParsing="false" text="Najczęściej występująca nazwa kraju w tekście" />
       <CheckBox fx:id="mostSurnameFeature" layoutX="26.0" layoutY="267.0" mnemonicParsing="false" text="Najczęściej występujące nazwisko w tekście " />
       <CheckBox fx:id="mostExeFeatrue" layoutX="26.0" layoutY="291.0" mnemonicParsing="false" text="Najczęściej występujący skrót giełdy papierów wartościowych w tekście" />
-      <CheckBox fx:id="mostCountryFeature" layoutX="26.0" layoutY="315.0" mnemonicParsing="false" text="Najczęściej występujący kontynent w tekście" />
+      <CheckBox fx:id="mostContinentFeature" layoutX="26.0" layoutY="315.0" mnemonicParsing="false" text="Najczęściej występujący kontynent w tekście" />
       <CheckBox fx:id="mostKeyWordInTitleFeature" layoutX="25.0" layoutY="339.0" mnemonicParsing="false" text="Udział słów kluczowych w tytule tekstu" />
       <Button fx:id="startButton" layoutX="451.0" layoutY="344.0" mnemonicParsing="false" onAction="#onStartButtonClick" text="START" />
       <TextField fx:id="testingSetField" layoutX="327.0" layoutY="49.0" />

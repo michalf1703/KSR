@@ -334,7 +334,7 @@ public class DataExtarctor {
         for (DataInstance testData : testSet) {
             String predictedLabel = knn.classify(testData.getFeatureVector());
             String actualLabel = testData.getCountryLabel();
-           System.out.println("Rzeczywista etykieta: " + actualLabel + ", Przewidziana etykieta: " + predictedLabel);
+          // System.out.println("Rzeczywista etykieta: " + actualLabel + ", Przewidziana etykieta: " + predictedLabel);
             if (predictedLabel.equals(actualLabel)) {
                 correctPredictions++;
             }
@@ -394,9 +394,6 @@ public class DataExtarctor {
                 canadaSize++;
             }
         }
-        System.out.println("TP dla France: " + correctFrance);
-        System.out.println("FP dla France: " + incorrectFrance);
-        System.out.println("Wszystkie artykuły dla France: " + franceSize);
         double precisionUK = (double) correctUK / (correctUK + incorrectUK) * 100;
         double precisionUSA = (double) correctUSA / (correctUSA + incorrectUSA) * 100;
         double precisionJapan = (double) correctJapan / (correctJapan + incorrectJapan) * 100;

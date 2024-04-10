@@ -26,31 +26,34 @@ public class FeaturesExtractor {
             features.add(keywordFrequency.calculateFKey(words));
         }
         if (featuresIndexes.contains(1)) {
-            features.add(keywordFrequency.calculateFKey(words2));
-        }
-        if (featuresIndexes.contains(2)) {
-            features.add(keywordFrequency20.calculateNKey20(words));
-        }
-        if (featuresIndexes.contains(3)) {
             features.add(WCapital);
         }
-        if (featuresIndexes.contains(4)) {
+        if (featuresIndexes.contains(2)) {
             features.add(mostCommonCurrency.calculateMostCommonCurrency(words));
         }
+        if (featuresIndexes.contains(3)) {
+            features.add(keywordFrequency20.calculateNKey20(words));
+        }
+        if (featuresIndexes.contains(4)) {
+            features.add(mostCommonAdjective.calculateMostCommonAdjective(words));
+        }
+
         if (featuresIndexes.contains(5)) {
             features.add(mostCommonCountry.calculateMostCommonCountry(words));
         }
         if (featuresIndexes.contains(6)) {
-            features.add(mostCommonAdjective.calculateMostCommonAdjective(words));
-        }
-        if (featuresIndexes.contains(7)) {
-            features.add(mostCommonContinent.calculateMostCommonContinent(words));
-        }
-        if (featuresIndexes.contains(8)) {
             features.add(mostCommonSurname.calculateMostCommonSurname(words));
         }
-        if (featuresIndexes.contains(9)) {
+        if (featuresIndexes.contains(7)) {
             features.add(mostCommonExchange.calculateMostCommonExchange(words));
+        }
+
+        if (featuresIndexes.contains(8)) {
+            features.add(mostCommonContinent.calculateMostCommonContinent(words));
+        }
+
+        if (featuresIndexes.contains(9)) {
+            features.add(keywordFrequency.calculateFKey(words2));
         }
         return features;
     }
