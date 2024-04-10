@@ -6,9 +6,9 @@ import ksr1.ksrproject1.FeaturesEx.*;
 import ksr1.ksrproject1.KNN;
 import ksr1.ksrproject1.Metrics.Chebyshev;
 import ksr1.ksrproject1.Metrics.Euclidean;
+import ksr1.ksrproject1.Metrics.IMetric;
 import ksr1.ksrproject1.Metrics.Street;
 import ksr1.ksrproject1.ReadyArticle;
-import ksr1.ksrproject1.SimilarityMeasure.NGram;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -19,27 +19,27 @@ import java.util.stream.Collectors;
 
 public class DataExtarctor {
     private ArrayList<ReadyArticle> readyArticles;
-    private KeywordFrequency keywordFrequency = new KeywordFrequency();
-    private KeywordFrequency20 keywordFrequency20 = new KeywordFrequency20();
-    private MostCommonCurrency mostCommonCurrency = new MostCommonCurrency();
-    private MostCommonCountry mostCommonCountry = new MostCommonCountry();
-    private MostCommonAdjective mostCommonAdjective = new MostCommonAdjective();
-    private MostCommonContinent mostCommonContinent = new MostCommonContinent();
-    private MostCommonSurname mostCommonSurname = new MostCommonSurname();
-    private MostCommonExchange mostCommonExchange = new MostCommonExchange();
     ArrayList<String> stopList = loadStopList("C:\\Users\\Hp\\Documents\\GitHub\\KSR\\KSR-project1\\src\\main\\resources\\ dictionaries\\stop_words.txt");
     private WCapitalFeature wCapitalFeature = new WCapitalFeature();
     private DataInstance dataInstance;
     private FeaturesExtractor featuresExtractor = new FeaturesExtractor();
     private List<String> stopWords;
+    private int k;
+    private IMetric metric;
+    private double setDivision;
+    private List<Integer> featuresIndexes;
 
 
     private int numberOfArticles;
 
-    public DataExtarctor() {
-        readyArticles = new ArrayList<>();
-        numberOfArticles = 0;
-        stopWords = loadKeyWordsList();
+    public DataExtarctor(int k, IMetric metric, double setDivision, List<Integer> featuresIndexes) {
+        this.k = k;
+        this.metric = metric;
+        this.setDivision = setDivision;
+        this.featuresIndexes = new ArrayList<>(featuresIndexes);
+        this.readyArticles = new ArrayList<>();
+        this.numberOfArticles = 0;
+        this.stopWords = loadKeyWordsList();
     }
     private List<String> loadKeyWordsList() {
         List<String> keyList = new ArrayList<>();
@@ -253,7 +253,7 @@ public class DataExtarctor {
                 e.printStackTrace();
             }
         }
-        displayArticles();
+        start();
     }
 
     private boolean isValidPlace(String place) {
@@ -286,29 +286,21 @@ public class DataExtarctor {
         return stemmWords;
     }
 
-    public void displayArticles() {
+    public void start() {
         ArrayList<DataInstance> dataInstances = new ArrayList<>();
         for (ReadyArticle article : readyArticles) {
             article.setWords(removeWordsContainedInStopList(article.getWords(), stopList));
             article.setWords(MakeWordsStemization(article.getWords()));
-            //System.out.println(article.toString());
-            double number3 = keywordFrequency.calculateFKey(article.getTitle());
-            double number4 = article.getWCapital();
-            Vector<Object> features = featuresExtractor.extractFeatures(article.getWords());
-            features.add(number3);
-            features.add(number4);
+            Vector<Object> features = featuresExtractor.extractFeatures(article.getWords(),article.getTitle(),article.getWCapital(), featuresIndexes);
             String countryLabel = article.getPlace();
 
             DataInstance dataInstance = new DataInstance(features, countryLabel);
             dataInstances.add(dataInstance);
         }
 
-        List<List<DataInstance>> dataSets = DataInstance.splitDataSet(dataInstances, 0.7);
+        List<List<DataInstance>> dataSets = DataInstance.splitDataSet(dataInstances, setDivision);
         List<DataInstance> trainingSet = dataSets.get(0);
         List<DataInstance> testSet = dataSets.get(1);
-        Euclidean metric = new Euclidean();
-        Chebyshev metric2 = new Chebyshev();
-        Street metric3 = new Street();
         for(DataInstance dataInstance : trainingSet){
             System.out.println(dataInstance.getFeatureVector());
         }
@@ -318,7 +310,6 @@ public class DataExtarctor {
        // System.out.println("Liczba danych treningowych: " + trainingSet.size());
         //System.out.println("Liczba danych testowych: " + testSet.size());
 
-        int k = 4; // Liczba sąsiadów
         KNN knn = new KNN(trainingSet, metric, k); // Ustaw metrykę i liczbę sąsiadów
         int correctPredictions = 0;
         int correctUSA = 0;

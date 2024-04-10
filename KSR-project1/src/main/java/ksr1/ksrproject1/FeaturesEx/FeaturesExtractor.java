@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 public class FeaturesExtractor {
@@ -19,16 +20,38 @@ public class FeaturesExtractor {
     public FeaturesExtractor() {
     }
 
-    public Vector<Object> extractFeatures(ArrayList<String> words) {
+    public Vector<Object> extractFeatures(ArrayList<String> words,ArrayList<String> words2, double WCapital,List<Integer> featuresIndexes) {
         Vector<Object> features = new Vector<>();
-        features.add(keywordFrequency.calculateFKey(words));
-        features.add(keywordFrequency20.calculateNKey20(words));
-        features.add(mostCommonCurrency.calculateMostCommonCurrency(words));
-        features.add(mostCommonCountry.calculateMostCommonCountry(words));
-        features.add(mostCommonAdjective.calculateMostCommonAdjective(words));
-        features.add(mostCommonContinent.calculateMostCommonContinent(words));
-        features.add(mostCommonSurname.calculateMostCommonSurname(words));
-        features.add(mostCommonExchange.calculateMostCommonExchange(words));
+        if (featuresIndexes.contains(0)) {
+            features.add(keywordFrequency.calculateFKey(words));
+        }
+        if (featuresIndexes.contains(1)) {
+            features.add(keywordFrequency.calculateFKey(words2));
+        }
+        if (featuresIndexes.contains(2)) {
+            features.add(keywordFrequency20.calculateNKey20(words));
+        }
+        if (featuresIndexes.contains(3)) {
+            features.add(WCapital);
+        }
+        if (featuresIndexes.contains(4)) {
+            features.add(mostCommonCurrency.calculateMostCommonCurrency(words));
+        }
+        if (featuresIndexes.contains(5)) {
+            features.add(mostCommonCountry.calculateMostCommonCountry(words));
+        }
+        if (featuresIndexes.contains(6)) {
+            features.add(mostCommonAdjective.calculateMostCommonAdjective(words));
+        }
+        if (featuresIndexes.contains(7)) {
+            features.add(mostCommonContinent.calculateMostCommonContinent(words));
+        }
+        if (featuresIndexes.contains(8)) {
+            features.add(mostCommonSurname.calculateMostCommonSurname(words));
+        }
+        if (featuresIndexes.contains(9)) {
+            features.add(mostCommonExchange.calculateMostCommonExchange(words));
+        }
         return features;
     }
 
