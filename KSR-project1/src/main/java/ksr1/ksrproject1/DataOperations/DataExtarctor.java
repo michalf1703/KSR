@@ -4,22 +4,18 @@ import ksr1.ksrproject1.Article;
 import ksr1.ksrproject1.DataInstance;
 import ksr1.ksrproject1.FeaturesEx.*;
 import ksr1.ksrproject1.KNN;
-import ksr1.ksrproject1.Metrics.Chebyshev;
-import ksr1.ksrproject1.Metrics.Euclidean;
 import ksr1.ksrproject1.Metrics.IMetric;
-import ksr1.ksrproject1.Metrics.Street;
 import ksr1.ksrproject1.ReadyArticle;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class DataExtarctor {
     private ArrayList<ReadyArticle> readyArticles;
-    ArrayList<String> stopList = loadStopList("C:\\Users\\Hp\\Documents\\GitHub\\KSR\\KSR-project1\\src\\main\\resources\\ dictionaries\\stop_words.txt");
+    DictionaryLoader dictionaryLoader = new DictionaryLoader();
+    ArrayList<String> stopList = dictionaryLoader.loadStopList("src/main/resources/ dictionaries/stop_words.txt");
     private WCapitalFeature wCapitalFeature = new WCapitalFeature();
     private DataInstance dataInstance;
     private FeaturesExtractor featuresExtractor = new FeaturesExtractor();
@@ -39,20 +35,9 @@ public class DataExtarctor {
         this.featuresIndexes = new ArrayList<>(featuresIndexes);
         this.readyArticles = new ArrayList<>();
         this.numberOfArticles = 0;
-        this.stopWords = loadKeyWordsList();
+        this.stopWords = dictionaryLoader.loadWordsList("src/main/resources/ dictionaries/keyWords.txt");
     }
-    private List<String> loadKeyWordsList() {
-        List<String> keyList = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/ dictionaries/keyWords.txt"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                keyList.add(line.trim());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return keyList;
-    }
+
     public void incrementArticlesCount() {
         numberOfArticles++;
     }
@@ -234,7 +219,7 @@ public class DataExtarctor {
                             readyArticles.add(readyArticle);
                             incrementArticlesCount();
                             ArrayList<String> bodyList = currentArticle.extractWordsFromBody();
-                            ArrayList<String> words = removeWordsContainedInStopList(bodyList, stopList);
+                            ArrayList<String> words = dictionaryLoader.removeWordsContainedInStopList(bodyList, stopList);
                             String body = currentArticle.concatenateWords(words);
                             double wynik = wCapitalFeature.calculateWCapital(body);
                             readyArticle.setWCapital(wynik);
@@ -289,7 +274,7 @@ public class DataExtarctor {
     public void start() {
         ArrayList<DataInstance> dataInstances = new ArrayList<>();
         for (ReadyArticle article : readyArticles) {
-            article.setWords(removeWordsContainedInStopList(article.getWords(), stopList));
+            article.setWords(dictionaryLoader.removeWordsContainedInStopList(article.getWords(), stopList));
             article.setWords(MakeWordsStemization(article.getWords()));
             Vector<Object> features = featuresExtractor.extractFeatures(article.getWords(),article.getTitle(),article.getWCapital(), featuresIndexes);
             String countryLabel = article.getPlace();
@@ -444,26 +429,7 @@ public class DataExtarctor {
 
     }
 
-    private ArrayList<String> removeWordsContainedInStopList(ArrayList<String> words, ArrayList<String> stopList) {
-        return words.stream()
-                .filter(word -> !stopList.contains(word))
-                .collect(Collectors.toCollection(ArrayList::new));
-    }
 
-    public ArrayList<String> loadStopList(String filePath) {
-        ArrayList<String> stopList = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String word = line.trim();
-                stopList.add(word);
-                stopList.add(Character.toUpperCase(word.charAt(0)) + word.substring(1).toLowerCase());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return stopList;
-    }
 
 
 }

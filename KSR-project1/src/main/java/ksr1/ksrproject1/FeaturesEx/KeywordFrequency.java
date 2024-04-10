@@ -1,18 +1,17 @@
 package ksr1.ksrproject1.FeaturesEx;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import ksr1.ksrproject1.DataOperations.DictionaryLoader;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class KeywordFrequency {
 
-    public String keyWordsPath = "src/main/resources/ dictionaries/keyWords.txt";
-    private ArrayList<String> keyWordsList;
+    private List<String> keyWordsList;
+    DictionaryLoader dictionaryLoader = new DictionaryLoader();
 
     public KeywordFrequency() {
-        this.keyWordsList = loadKeyWordsList();
+        this.keyWordsList = dictionaryLoader.loadWordsList("src/main/resources/ dictionaries/keyWords.txt");
     }
 
     public double calculateFKey(ArrayList<String> words) {
@@ -31,17 +30,6 @@ public class KeywordFrequency {
         return words.size();
     }
 
-    private ArrayList<String> loadKeyWordsList() {
-        ArrayList<String> keyList = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(keyWordsPath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                keyList.add(line.trim());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return keyList;
-    }
+
 }
 

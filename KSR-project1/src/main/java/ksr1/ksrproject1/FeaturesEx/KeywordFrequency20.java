@@ -17,7 +17,6 @@ public class KeywordFrequency20 {
         if (twentyPercent >= totalWords) {
             return (double) keywordFrequency.countKeywords(words) / totalWords;
         }
-
         List<String> firstTwentyPercentWords = words.subList(0, twentyPercent);
         int keywordCount = keywordFrequency.countKeywords(new ArrayList<>(firstTwentyPercentWords));
         return (double) keywordCount / twentyPercent;
