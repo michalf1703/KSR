@@ -46,12 +46,12 @@ public class Classifier {
         List<List<DataInstance>> dataSets = DataInstance.splitDataSet(dataInstances, setDivision);
         List<DataInstance> trainingSet = dataSets.get(0);
         List<DataInstance> testSet = dataSets.get(1);
-        for(DataInstance dataInstance : trainingSet){
-            System.out.println(dataInstance.getFeatureVector());
-        }
-        for(DataInstance dataInstance : testSet){
-            System.out.println(dataInstance.getFeatureVector());
-        }
+       // for(DataInstance dataInstance : trainingSet){
+         //   System.out.println(dataInstance.getFeatureVector());
+       // }
+       // for(DataInstance dataInstance : testSet){
+         //   System.out.println(dataInstance.getFeatureVector());
+        //}
         // System.out.println("Liczba danych treningowych: " + trainingSet.size());
         //System.out.println("Liczba danych testowych: " + testSet.size());
 
@@ -139,28 +139,31 @@ public class Classifier {
                 canadaSize++;
             }
         }
-        double precisionUK = (double) correctUK / (correctUK + incorrectUK) * 100;
-        double precisionUSA = (double) correctUSA / (correctUSA + incorrectUSA) * 100;
-        double precisionJapan = (double) correctJapan / (correctJapan + incorrectJapan) * 100;
-        double precisionFrance = (double) correctFrance / (correctFrance + incorrectFrance) * 100;
-        double precisionGermany = (double) correctGermany / (correctGermany + incorrectGermany) * 100;
-        double precisionCanada = (double) correctCanada / (correctCanada + incorrectCanada) * 100;
-        double recallUSA = (double) correctUSA / usaSize * 100;
-        double recallUK = (double) correctUK / ukSize * 100;
-        double recallJapan = (double) correctJapan / japanSize * 100;
-        double recallFrance = (double) correctFrance / franceSize * 100;
-        double recallGermany = (double) correctGermany / germanySize * 100;
-        double recallCanada = (double) correctCanada / canadaSize * 100;
-        double accuracy = (double) correctPredictions / testSet.size() * 100;
-        double precision = (precisionUK*ukSize + precisionUSA*usaSize + precisionJapan*japanSize + precisionFrance*franceSize + precisionGermany*germanySize + precisionCanada*canadaSize)/testSet.size();
-        double recall = ((recallUSA*usaSize + recallUK*ukSize + recallJapan*japanSize + recallFrance*franceSize + recallGermany*germanySize + recallCanada*canadaSize)/testSet.size());
-        double f1Usa = 2 * (precisionUSA * recallUSA) / (precisionUSA + recallUSA);
-        double f1Uk = 2 * (precisionUK * recallUK) / (precisionUK + recallUK);
-        double f1Japan = 2 * (precisionJapan * recallJapan) / (precisionJapan + recallJapan);
-        double f1France = 2 * (precisionFrance * recallFrance) / (precisionFrance + recallFrance);
-        double f1Germany = 2 * (precisionGermany * recallGermany) / (precisionGermany + recallGermany);
-        double f1Canada = 2 * (precisionCanada * recallCanada) / (precisionCanada + recallCanada);
-        double f1 = (f1Usa*usaSize + f1Uk*ukSize + f1Japan*japanSize + f1France*franceSize + f1Germany*germanySize + f1Canada*canadaSize)/testSet.size();
+        double precisionUK = Math.round(((double) correctUK / (correctUK + incorrectUK) * 100) * 1000.0) / 1000.0;
+        double precisionUSA = Math.round(((double) correctUSA / (correctUSA + incorrectUSA) * 100) * 1000.0) / 1000.0;
+        double precisionJapan = Math.round(((double) correctJapan / (correctJapan + incorrectJapan) * 100) * 1000.0) / 1000.0;
+        double precisionFrance = Math.round(((double) correctFrance / (correctFrance + incorrectFrance) * 100) * 1000.0) / 1000.0;
+        double precisionGermany = Math.round(((double) correctGermany / (correctGermany + incorrectGermany) * 100) * 1000.0) / 1000.0;
+        double precisionCanada = Math.round(((double) correctCanada / (correctCanada + incorrectCanada) * 100) * 1000.0) / 1000.0;
+        double recallUSA = Math.round(((double) correctUSA / usaSize * 100) * 1000.0) / 1000.0;
+        double recallUK = Math.round(((double) correctUK / ukSize * 100) * 1000.0) / 1000.0;
+        double recallJapan = Math.round(((double) correctJapan / japanSize * 100) * 1000.0) / 1000.0;
+        double recallFrance = Math.round(((double) correctFrance / franceSize * 100) * 1000.0) / 1000.0;
+        double recallGermany = Math.round(((double) correctGermany / germanySize * 100) * 1000.0) / 1000.0;
+        double recallCanada = Math.round(((double) correctCanada / canadaSize * 100) * 1000.0) / 1000.0;
+        double accuracy = Math.round(((double) correctPredictions / testSet.size() * 100) * 1000.0) / 1000.0;
+        double precision = Math.round(((precisionUK*ukSize + precisionUSA*usaSize + precisionJapan*japanSize + precisionFrance*franceSize + precisionGermany*germanySize + precisionCanada*canadaSize)/testSet.size()) * 1000.0) / 1000.0;
+        double recall = Math.round((((recallUSA*usaSize + recallUK*ukSize + recallJapan*japanSize + recallFrance*franceSize + recallGermany*germanySize + recallCanada*canadaSize)/testSet.size())) * 1000.0) / 1000.0;
+        double f1Usa = Math.round((2 * (precisionUSA * recallUSA) / (precisionUSA + recallUSA)) * 1000.0) / 1000.0;
+        double f1Uk = Math.round((2 * (precisionUK * recallUK) / (precisionUK + recallUK)) * 1000.0) / 1000.0;
+        double f1Japan = Math.round((2 * (precisionJapan * recallJapan) / (precisionJapan + recallJapan)) * 1000.0) / 1000.0;
+        double f1France = Math.round((2 * (precisionFrance * recallFrance) / (precisionFrance + recallFrance)) * 1000.0) / 1000.0;
+        double f1Germany = Math.round((2 * (precisionGermany * recallGermany) / (precisionGermany + recallGermany)) * 1000.0) / 1000.0;
+        double f1Canada = Math.round((2 * (precisionCanada * recallCanada) / (precisionCanada + recallCanada)) * 1000.0) / 1000.0;
+        double f1 = Math.round(((f1Usa*usaSize + f1Uk*ukSize + f1Japan*japanSize + f1France*franceSize + f1Germany*germanySize + f1Canada*canadaSize)/testSet.size()) * 1000.0) / 1000.0;
+        System.out.println("----------------------------------------------------------------");
+        System.out.println("Usa.size):" + usaSize);
+        System.out.println("correct+incorrect):" + (correctUSA + incorrectUSA));
         System.out.println("Dokładność klasyfikacji(accuracy): " + accuracy + "%");
         System.out.println("Precyzja klasyfikacji dla calej klasyfikacji: " + precision + "%");
         System.out.println("Czułość klasyfikacji dla calej klasyfikacji: " + recall + "%");
@@ -183,6 +186,7 @@ public class Classifier {
         System.out.println("F1 dla France: " + f1France);
         System.out.println("F1 dla West-Germany: " + f1Germany);
         System.out.println("F1 dla Canada: " + f1Canada);
+        System.out.println("----------------------------------------------------------------");
         return accuracy;
     }
 
