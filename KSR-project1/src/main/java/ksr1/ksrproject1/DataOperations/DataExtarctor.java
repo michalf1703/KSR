@@ -18,9 +18,6 @@ public class DataExtarctor {
     ArrayList<String> stopList = dictionaryLoader.loadStopList("src/main/resources/ dictionaries/stop_words.txt");
     private WCapitalFeature wCapitalFeature = new WCapitalFeature();
 
-    private List<Integer> featuresIndexes;
-
-
     private int numberOfArticles;
 
     public DataExtarctor() {
@@ -46,7 +43,7 @@ public class DataExtarctor {
         //String people = "";
         Article currentArticle = new Article("", "","","", "", "", "");
         boolean flag;
-        for (int i = 1; i <= 21; i++) {
+        for (int i = 1; i <= 4; i++) {
             String numerPliku = String.format("%03d", i);
             String nazwaPliku = "src/main/resources/documents/reut2-" + numerPliku + ".sgm";
             try {
@@ -217,8 +214,6 @@ public class DataExtarctor {
                             currentArticle = null;
                         }
                     }
-
-
                 }
 
                 bufferedReader.close();
@@ -239,11 +234,5 @@ public class DataExtarctor {
                 place.equals("uk") ||
                 place.equals("canada");
     }
-
-
-
-
-
-
 
 }

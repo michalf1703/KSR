@@ -38,6 +38,8 @@ public class ReadyArticle {
     private void extractWords(String text) {
         String[] wordsArray = text.split("\\s+");
         boolean isWestDetected = false;
+        boolean isNorthDetected = false;
+        boolean isSouthDetected = false;
 
         for (int i = 0; i < wordsArray.length; i++) {
             String word = wordsArray[i];
@@ -52,6 +54,25 @@ public class ReadyArticle {
                     isWestDetected = false;
                     continue;
                 }
+
+                if (word.equals("north")) {
+                    isNorthDetected = true;
+                    continue;
+                } else if (isNorthDetected && word.equals("america")) {
+                    words.add("north-america");
+                    isNorthDetected = false;
+                    continue;
+                }
+
+                if (word.equals("south")) {
+                    isSouthDetected = true;
+                    continue;
+                } else if (isSouthDetected && word.equals("america")) {
+                    words.add("south-america");
+                    isSouthDetected = false;
+                    continue;
+                }
+
                 words.add(word);
             }
         }

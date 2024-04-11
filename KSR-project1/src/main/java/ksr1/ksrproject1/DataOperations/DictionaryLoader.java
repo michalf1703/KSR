@@ -26,6 +26,7 @@ public class DictionaryLoader {
     public ArrayList<String> removeWordsContainedInStopList(ArrayList<String> words, ArrayList<String> stopList) {
         return words.stream()
                 .filter(word -> !stopList.contains(word))
+                .filter(word -> !word.matches("\\d+([.,]\\d+)?"))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 

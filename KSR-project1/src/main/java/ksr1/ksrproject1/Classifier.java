@@ -31,7 +31,7 @@ public class Classifier {
     ArrayList<String> stopList = dictionaryLoader.loadStopList("src/main/resources/ dictionaries/stop_words.txt");
     private FeaturesExtractor featuresExtractor = new FeaturesExtractor();
 
-    public void start(ArrayList<ReadyArticle> readyArticles) {
+    public double start(ArrayList<ReadyArticle> readyArticles) {
         ArrayList<DataInstance> dataInstances = new ArrayList<>();
         for (ReadyArticle article : readyArticles) {
             article.setWords(dictionaryLoader.removeWordsContainedInStopList(article.getWords(), stopList));
@@ -183,7 +183,7 @@ public class Classifier {
         System.out.println("F1 dla France: " + f1France);
         System.out.println("F1 dla West-Germany: " + f1Germany);
         System.out.println("F1 dla Canada: " + f1Canada);
-
+        return accuracy;
     }
 
     public ArrayList<String> MakeWordsStemization(ArrayList<String> words) {

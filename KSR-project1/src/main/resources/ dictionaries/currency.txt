@@ -2,11 +2,9 @@ dlr
 austdlr
 eurodollar
 dollar
-hk
 franc
 singdlr
 nzdlr
-can
 stg
 dmk
 yen
@@ -27,4 +25,3 @@ rupiah
 ringgit
 escudo
 peseta
-drachma
