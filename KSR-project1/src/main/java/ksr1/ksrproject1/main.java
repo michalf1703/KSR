@@ -17,7 +17,7 @@ import java.util.List;
 class App2
 {
     public static void main( String[] args ) {
-     /*   ArrayList<Integer> featuresIndexes = new ArrayList<>();
+        ArrayList<Integer> featuresIndexes = new ArrayList<>();
         featuresIndexes.add(0);
         featuresIndexes.add(1);
         featuresIndexes.add(2);
@@ -32,17 +32,19 @@ class App2
         int[] kValues = {1, 2, 4, 6, 9, 12, 16, 20, 25, 30};
 
         // Lista do przechowywania wyników accuracy
-        List<Double> accuracyResults = new ArrayList<>();
+        List<List<Double>> accuracyResults = new ArrayList<>();
+        List<List<Double>> accuracyResults2 = new ArrayList<>();
+        List<List<Double>> accuracyResults3 = new ArrayList<>();
 
         for (int k : kValues) {
             DataExtarctor dataExtarctor = new DataExtarctor();
             ArrayList<ReadyArticle> readyArticles = dataExtarctor.readFromFile();
             Euclidean metric = new Euclidean();
             Classifier classifier = new Classifier(k, metric, 0.6, featuresIndexes);
-            double accuracy = classifier.start(readyArticles);
+            List<Double> results = classifier.start(readyArticles);
 
             // Dodajemy wynik accuracy do listy
-            accuracyResults.add(accuracy);
+            accuracyResults.add(results);
         }
 
         AccuracyChartK chart = new AccuracyChartK("Accuracy Chart", "Zależność Accuraccy od parametru k", accuracyResults);
@@ -50,41 +52,39 @@ class App2
         chart.setVisible(true);
 
         double[] setValues = {0.8, 0.6, 0.5, 0.3, 0.2};
-        List<Double> accuracyResults2 = new ArrayList<>();
 
         for (double set : setValues) {
             DataExtarctor dataExtarctor = new DataExtarctor();
             ArrayList<ReadyArticle> readyArticles = dataExtarctor.readFromFile();
             Euclidean metric = new Euclidean();
             Classifier classifier = new Classifier(9, metric, set, featuresIndexes);
-            double accuracy = classifier.start(readyArticles);
+            List<Double> results = classifier.start(readyArticles);
 
             // Dodajemy wynik accuracy do listy
-            accuracyResults2.add(accuracy);
+            accuracyResults2.add(results);
         }
 
         AccuracyChartSet chart2 = new AccuracyChartSet("Accuracy Chart", "Zależność Accuraccy od podziału zbioru", accuracyResults2);
         chart2.pack();
         chart2.setVisible(true);
 
-        /*
-        List<Double> accuracyResults3 = new ArrayList<>();
+
         List<IMetric> metrics = Arrays.asList(new Euclidean(), new Chebyshev(), new Street());
 
         for (IMetric metric : metrics) {
             DataExtarctor dataExtarctor = new DataExtarctor();
             ArrayList<ReadyArticle> readyArticles = dataExtarctor.readFromFile();
             Classifier classifier = new Classifier(9, metric, 0.6, featuresIndexes);
-            double accuracy = classifier.start(readyArticles);
+            List<Double> results = classifier.start(readyArticles);
 
             // Dodajemy wynik accuracy do listy
-            accuracyResults3.add(accuracy);
+            accuracyResults3.add(results);
         }
 
         AccuracyChartMetric chart3 = new AccuracyChartMetric("Accuracy Chart", "Zależność Accuraccy od wybranej metryki", accuracyResults3);
         chart3.pack();
         chart3.setVisible(true);
-        */
+
 
         //zbior samych liczbowych cech
         ArrayList<Integer> featuresIndexes2 = new ArrayList<>();
@@ -119,17 +119,18 @@ class App2
         featuresIndexes5.add(8); //kontynent
 
         List<ArrayList<Integer>> featuresIndexesList = Arrays.asList(featuresIndexes2, featuresIndexes3, featuresIndexes4, featuresIndexes5);
-        List<Double> accuracyResults4 = new ArrayList<>();
+        List<List<Double>> accuracyResults4 = new ArrayList<>();
         for (ArrayList<Integer> currentFeaturesIndexes : featuresIndexesList) {
                 DataExtarctor dataExtarctor = new DataExtarctor();
                 ArrayList<ReadyArticle> readyArticles = dataExtarctor.readFromFile();
                 Euclidean metric = new Euclidean();
                 // Używamy aktualnego zestawu cech do utworzenia klasyfikatora
                 Classifier classifier = new Classifier(9, metric, 0.6, currentFeaturesIndexes);
-                double accuracy = classifier.start(readyArticles);
+                List<Double> results = classifier.start(readyArticles);
 
                 // Dodajemy wynik accuracy do listy
-                accuracyResults4.add(accuracy);
+                accuracyResults4.add(results);
+               // classifier.displayResults();
         }
 
         AccuracyChartFeatures chart4 = new AccuracyChartFeatures("Accuracy Chart", "Zależność Accuraccy od zestawu cech", accuracyResults4);

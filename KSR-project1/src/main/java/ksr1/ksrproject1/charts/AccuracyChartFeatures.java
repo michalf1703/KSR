@@ -3,6 +3,8 @@ package ksr1.ksrproject1.charts;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.ui.ApplicationFrame;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -11,29 +13,36 @@ import java.util.List;
 
 public class AccuracyChartFeatures extends ApplicationFrame {
 
-    public AccuracyChartFeatures(String applicationTitle, String chartTitle, List<Double> accuracyResults) {
+    public AccuracyChartFeatures(String applicationTitle, String chartTitle, List<List<Double>> metricsResults) {
         super(applicationTitle);
         JFreeChart barChart = ChartFactory.createBarChart(
                 chartTitle,
-                "Wartość parametru k",
-                "Wartość Accuracy",
-                createDataset(accuracyResults),
+                "Zestaw cech",
+                "Wartość metryki",
+                createDataset(metricsResults),
                 PlotOrientation.VERTICAL,
                 true, true, false);
+
+        CategoryPlot plot = barChart.getCategoryPlot();
+        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+        rangeAxis.setLowerBound(0.6);
 
         ChartPanel chartPanel = new ChartPanel(barChart);
         chartPanel.setPreferredSize(new java.awt.Dimension(760, 717));
         setContentPane(chartPanel);
     }
 
-    private DefaultCategoryDataset createDataset(List<Double> accuracyResults) {
+    private DefaultCategoryDataset createDataset(List<List<Double>> metricsResults) {
         final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         String[] featuresValues = {"Zbiór Cech1", "Zbiór Cech2", "Zbiór Cech3", "Zbiór Cech4"};
+        String[] metricsNames = {"Accuracy", "Precision", "Recall", "F1"};
 
-        for (int i = 0; i < accuracyResults.size(); i++) {
-            dataset.addValue(accuracyResults.get(i), "accuracy", featuresValues[i]);
+        for (int i = 0; i < featuresValues.length; i++) {
+            List<Double> featureResults = metricsResults.get(i);
+            for (int j = 0; j < featureResults.size(); j++) {
+                dataset.addValue(featureResults.get(j), metricsNames[j], featuresValues[i]);
+            }
         }
-
         return dataset;
     }
 }

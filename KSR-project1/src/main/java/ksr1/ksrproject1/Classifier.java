@@ -4,6 +4,7 @@ import ksr1.ksrproject1.DataOperations.DictionaryLoader;
 import ksr1.ksrproject1.DataOperations.PorterStemmer;
 import ksr1.ksrproject1.FeaturesEx.FeaturesExtractor;
 import ksr1.ksrproject1.Metrics.IMetric;
+import ksr1.ksrproject1.charts.ResultsDisplay;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,17 @@ import java.util.Vector;
 public class Classifier {
     private int k;
     private List<String> stopWords;
+    private double precisionUK;
+    private double precisionUSA;
+    private double precisionJapan;
+    private double precisionFrance;
+    private double precisionGermany, precisionCanada;
+    private double recallUSA, recallUK, recallJapan, recallFrance, recallGermany, recallCanada;
+    private double accuracy;
+    private double precision;
+    private double recall;
+    private double f1Usa, f1Uk, f1Japan, f1France, f1Germany, f1Canada;
+    private double f1;
 
 
     public Classifier(int k, IMetric metric, double setDivision, List<Integer> featuresIndexes) {
@@ -31,7 +43,7 @@ public class Classifier {
     ArrayList<String> stopList = dictionaryLoader.loadStopList("src/main/resources/ dictionaries/stop_words.txt");
     private FeaturesExtractor featuresExtractor = new FeaturesExtractor();
 
-    public double start(ArrayList<ReadyArticle> readyArticles) {
+    public List<Double> start(ArrayList<ReadyArticle> readyArticles) {
         ArrayList<DataInstance> dataInstances = new ArrayList<>();
         for (ReadyArticle article : readyArticles) {
             article.setWords(dictionaryLoader.removeWordsContainedInStopList(article.getWords(), stopList));
@@ -139,28 +151,30 @@ public class Classifier {
                 canadaSize++;
             }
         }
-        double precisionUK = Math.round(((double) correctUK / (correctUK + incorrectUK) * 100) * 1000.0) / 1000.0;
-        double precisionUSA = Math.round(((double) correctUSA / (correctUSA + incorrectUSA) * 100) * 1000.0) / 1000.0;
-        double precisionJapan = Math.round(((double) correctJapan / (correctJapan + incorrectJapan) * 100) * 1000.0) / 1000.0;
-        double precisionFrance = Math.round(((double) correctFrance / (correctFrance + incorrectFrance) * 100) * 1000.0) / 1000.0;
-        double precisionGermany = Math.round(((double) correctGermany / (correctGermany + incorrectGermany) * 100) * 1000.0) / 1000.0;
-        double precisionCanada = Math.round(((double) correctCanada / (correctCanada + incorrectCanada) * 100) * 1000.0) / 1000.0;
-        double recallUSA = Math.round(((double) correctUSA / usaSize * 100) * 1000.0) / 1000.0;
-        double recallUK = Math.round(((double) correctUK / ukSize * 100) * 1000.0) / 1000.0;
-        double recallJapan = Math.round(((double) correctJapan / japanSize * 100) * 1000.0) / 1000.0;
-        double recallFrance = Math.round(((double) correctFrance / franceSize * 100) * 1000.0) / 1000.0;
-        double recallGermany = Math.round(((double) correctGermany / germanySize * 100) * 1000.0) / 1000.0;
-        double recallCanada = Math.round(((double) correctCanada / canadaSize * 100) * 1000.0) / 1000.0;
-        double accuracy = Math.round(((double) correctPredictions / testSet.size() * 100) * 1000.0) / 1000.0;
-        double precision = Math.round(((precisionUK*ukSize + precisionUSA*usaSize + precisionJapan*japanSize + precisionFrance*franceSize + precisionGermany*germanySize + precisionCanada*canadaSize)/testSet.size()) * 1000.0) / 1000.0;
-        double recall = Math.round((((recallUSA*usaSize + recallUK*ukSize + recallJapan*japanSize + recallFrance*franceSize + recallGermany*germanySize + recallCanada*canadaSize)/testSet.size())) * 1000.0) / 1000.0;
-        double f1Usa = Math.round((2 * (precisionUSA * recallUSA) / (precisionUSA + recallUSA)) * 1000.0) / 1000.0;
-        double f1Uk = Math.round((2 * (precisionUK * recallUK) / (precisionUK + recallUK)) * 1000.0) / 1000.0;
-        double f1Japan = Math.round((2 * (precisionJapan * recallJapan) / (precisionJapan + recallJapan)) * 1000.0) / 1000.0;
-        double f1France = Math.round((2 * (precisionFrance * recallFrance) / (precisionFrance + recallFrance)) * 1000.0) / 1000.0;
-        double f1Germany = Math.round((2 * (precisionGermany * recallGermany) / (precisionGermany + recallGermany)) * 1000.0) / 1000.0;
-        double f1Canada = Math.round((2 * (precisionCanada * recallCanada) / (precisionCanada + recallCanada)) * 1000.0) / 1000.0;
-        double f1 = Math.round(((f1Usa*usaSize + f1Uk*ukSize + f1Japan*japanSize + f1France*franceSize + f1Germany*germanySize + f1Canada*canadaSize)/testSet.size()) * 1000.0) / 1000.0;
+        precisionUK = Math.round(((double) correctUK / (correctUK + incorrectUK)) * 1000.0) / 1000.0;
+        precisionUSA = Math.round(((double) correctUSA / (correctUSA + incorrectUSA)) * 1000.0) / 1000.0;
+        precisionJapan = Math.round(((double) correctJapan / (correctJapan + incorrectJapan)) * 1000.0) / 1000.0;
+        precisionFrance = Math.round(((double) correctFrance / (correctFrance + incorrectFrance)) * 1000.0) / 1000.0;
+        precisionGermany = Math.round(((double) correctGermany / (correctGermany + incorrectGermany)) * 1000.0) / 1000.0;
+        precisionCanada = Math.round(((double) correctCanada / (correctCanada + incorrectCanada)) * 1000.0) / 1000.0;
+        recallUSA = Math.round(((double) correctUSA / usaSize) * 1000.0) / 1000.0;
+        recallUK = Math.round(((double) correctUK / ukSize) * 1000.0) / 1000.0;
+        recallJapan = Math.round(((double) correctJapan / japanSize) * 1000.0) / 1000.0;
+        recallFrance = Math.round(((double) correctFrance / franceSize) * 1000.0) / 1000.0;
+        recallGermany = Math.round(((double) correctGermany / germanySize) * 1000.0) / 1000.0;
+        recallCanada = Math.round(((double) correctCanada / canadaSize) * 1000.0) / 1000.0;
+
+        accuracy = Math.round(((double) correctPredictions / testSet.size()) * 1000.0) / 1000.0;
+
+        precision = Math.round(((precisionUK*ukSize + precisionUSA*usaSize + precisionJapan*japanSize + precisionFrance*franceSize + precisionGermany*germanySize + precisionCanada*canadaSize)/testSet.size()) * 1000.0) / 1000.0;
+        recall = Math.round((((recallUSA*usaSize + recallUK*ukSize + recallJapan*japanSize + recallFrance*franceSize + recallGermany*germanySize + recallCanada*canadaSize)/testSet.size())) * 1000.0) / 1000.0;
+        f1Usa = Math.round((2 * (precisionUSA * recallUSA) / (precisionUSA + recallUSA)) * 1000.0) / 1000.0;
+        f1Uk = Math.round((2 * (precisionUK * recallUK) / (precisionUK + recallUK)) * 1000.0) / 1000.0;
+        f1Japan = Math.round((2 * (precisionJapan * recallJapan) / (precisionJapan + recallJapan)) * 1000.0) / 1000.0;
+        f1France = Math.round((2 * (precisionFrance * recallFrance) / (precisionFrance + recallFrance)) * 1000.0) / 1000.0;
+        f1Germany = Math.round((2 * (precisionGermany * recallGermany) / (precisionGermany + recallGermany)) * 1000.0) / 1000.0;
+        f1Canada = Math.round((2 * (precisionCanada * recallCanada) / (precisionCanada + recallCanada)) * 1000.0) / 1000.0;
+        f1 = Math.round(((f1Usa*usaSize + f1Uk*ukSize + f1Japan*japanSize + f1France*franceSize + f1Germany*germanySize + f1Canada*canadaSize)/testSet.size()) * 1000.0) / 1000.0;
         System.out.println("----------------------------------------------------------------");
         System.out.println("Usa.size):" + usaSize);
         System.out.println("correct+incorrect):" + (correctUSA + incorrectUSA));
@@ -187,7 +201,39 @@ public class Classifier {
         System.out.println("F1 dla West-Germany: " + f1Germany);
         System.out.println("F1 dla Canada: " + f1Canada);
         System.out.println("----------------------------------------------------------------");
-        return accuracy;
+        List<Double> results = new ArrayList<>();
+        results.add(accuracy);
+        results.add(precision);
+        results.add(recall);
+        results.add(f1);
+        return results;
+    }
+    public String displayResults() {
+        StringBuilder results = new StringBuilder();
+        results.append("Dokładność klasyfikacji(accuracy): ").append(accuracy).append("%\n");
+        results.append("Precyzja klasyfikacji dla calej klasyfikacji: ").append(precision).append("%\n");
+        results.append("Czułość klasyfikacji dla calej klasyfikacji: ").append(recall).append("%\n");
+         results.append("F1 dla calej klasyfikacji: ").append(f1).append("\n");
+        results.append("Precyzja klasyfikacji dla USA: ").append(precisionUSA).append("%\n");
+        results.append("Precyzja klasyfikacji dla UK: ").append(precisionUK).append("%\n");
+        results.append("Precyzja klasyfikacji dla Japan: ").append(precisionJapan).append("%\n");
+        results.append("Precyzja klasyfikacji dla France: ").append(precisionFrance).append("%\n");
+        results.append("Precyzja klasyfikacji dla West-Germany: ").append(precisionGermany).append("%\n");
+        results.append("Precyzja klasyfikacji dla Canada: ").append(precisionCanada).append("%\n");
+        results.append("Czułość klasyfikacji dla USA: ").append(recallUSA).append("%\n");
+        results.append("Czułość klasyfikacji dla UK: ").append(recallUK).append("%\n");
+        results.append("Czułość klasyfikacji dla Japan: ").append(recallJapan).append("%\n");
+        results.append("Czułość klasyfikacji dla France: ").append(recallFrance).append("%\n");
+        results.append("Czułość klasyfikacji dla West-Germany: ").append(recallGermany).append("%\n");
+        results.append("Czułość klasyfikacji dla Canada: ").append(recallCanada).append("%\n");
+        results.append("F1 dla USA: ").append(f1Usa).append("\n");
+        results.append("F1 dla UK: ").append(f1Uk).append("\n");
+        results.append("F1 dla Japan: ").append(f1Japan).append("\n");
+        results.append("F1 dla France: ").append(f1France).append("\n");
+        results.append("F1 dla West-Germany: ").append(f1Germany).append("\n");
+        results.append("F1 dla Canada: ").append(f1Canada).append("\n");
+        ResultsDisplay resultsDisplay = new ResultsDisplay();
+        return results.toString();
     }
 
     public ArrayList<String> MakeWordsStemization(ArrayList<String> words) {

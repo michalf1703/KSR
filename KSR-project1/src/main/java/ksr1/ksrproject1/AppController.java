@@ -1,7 +1,10 @@
 package ksr1.ksrproject1;
 
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import ksr1.ksrproject1.DataOperations.DataExtarctor;
 import ksr1.ksrproject1.Metrics.Chebyshev;
 import ksr1.ksrproject1.Metrics.Euclidean;
@@ -26,6 +29,7 @@ public class AppController {
     private String [] metrics = {"Metryka Euklidesowa", "Metryka Czebyszewa", "Metryka Uliczna"};
     private List<Integer> featuresIndexes;
     private IMetric metric;
+
 
 
     @FXML
@@ -72,7 +76,14 @@ public class AppController {
         ArrayList<ReadyArticle> readyArticles = dataExtarctor.readFromFile();
         Classifier classifier = new Classifier(k,metric,set, featuresIndexes);
         classifier.start(readyArticles);
-       // System.out.println("Liczba artykułów z odpowiednią etykietą PLACE: " + dataExtarctor.getArticlesCount());
+        String result = classifier.displayResults();
+        VBox vbox = new VBox(new TextArea(result));
+        Scene scene = new Scene(vbox, 500, 600);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.show();
+        //classifier.displayResults();
+        System.out.println("Liczba artykułów z odpowiednią etykietą PLACE: " + dataExtarctor.getArticlesCount());
 
     }
 
