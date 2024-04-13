@@ -47,7 +47,7 @@ class App2
             accuracyResults.add(results);
         }
 
-        AccuracyChartK chart = new AccuracyChartK("Accuracy Chart", "Zależność Accuraccy od parametru k", accuracyResults);
+        AccuracyChartK chart = new AccuracyChartK("Accuracy Chart", "Zależność wartości miary jakości klasyfikacji od wartości parametru k", accuracyResults);
         chart.pack();
         chart.setVisible(true);
 
@@ -64,7 +64,7 @@ class App2
             accuracyResults2.add(results);
         }
 
-        AccuracyChartSet chart2 = new AccuracyChartSet("Accuracy Chart", "Zależność Accuraccy od podziału zbioru", accuracyResults2);
+        AccuracyChartSet chart2 = new AccuracyChartSet("Accuracy Chart", "Zależność wartości miary jakości klasyfikacji od podziału zbiorów", accuracyResults2);
         chart2.pack();
         chart2.setVisible(true);
 
@@ -81,7 +81,7 @@ class App2
             accuracyResults3.add(results);
         }
 
-        AccuracyChartMetric chart3 = new AccuracyChartMetric("Accuracy Chart", "Zależność Accuraccy od wybranej metryki", accuracyResults3);
+        AccuracyChartMetric chart3 = new AccuracyChartMetric("Accuracy Chart", "Zależność wartości miary jakości klasyfikacji od wybranej metryki", accuracyResults3);
         chart3.pack();
         chart3.setVisible(true);
 
@@ -133,7 +133,7 @@ class App2
                // classifier.displayResults();
         }
 
-        AccuracyChartFeatures chart4 = new AccuracyChartFeatures("Accuracy Chart", "Zależność Accuraccy od zestawu cech", accuracyResults4);
+        AccuracyChartFeatures chart4 = new AccuracyChartFeatures("Accuracy Chart", "Zależność wartości miary jakości klasyfikacji od zestawu cech", accuracyResults4);
         chart4.pack();
         chart4.setVisible(true);
 
