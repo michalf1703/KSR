@@ -43,7 +43,7 @@ public class DataExtarctor {
         //String people = "";
         Article currentArticle = new Article("", "","","", "", "", "");
         boolean flag;
-        for (int i = 1; i <= 21; i++) {
+        for (int i = 1; i <= 6; i++) {
             String numerPliku = String.format("%03d", i);
             String nazwaPliku = "src/main/resources/documents/reut2-" + numerPliku + ".sgm";
             try {

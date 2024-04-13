@@ -50,7 +50,7 @@ public class Classifier {
             article.setWords(MakeWordsStemization(article.getWords()));
             Vector<Object> features = featuresExtractor.extractFeatures(article.getWords(),article.getTitle(),article.getWCapital(), featuresIndexes);
             String countryLabel = article.getPlace();
-
+           // System.out.println(article.toString());
             DataInstance dataInstance = new DataInstance(features, countryLabel);
             dataInstances.add(dataInstance);
         }
@@ -58,12 +58,12 @@ public class Classifier {
         List<List<DataInstance>> dataSets = DataInstance.splitDataSet(dataInstances, setDivision);
         List<DataInstance> trainingSet = dataSets.get(0);
         List<DataInstance> testSet = dataSets.get(1);
-       // for(DataInstance dataInstance : trainingSet){
-         //   System.out.println(dataInstance.getFeatureVector());
-       // }
-       // for(DataInstance dataInstance : testSet){
-         //   System.out.println(dataInstance.getFeatureVector());
-        //}
+        for(DataInstance dataInstance : trainingSet){
+            System.out.println(dataInstance.getFeatureVector());
+        }
+        for(DataInstance dataInstance : testSet){
+            System.out.println(dataInstance.getFeatureVector());
+        }
         // System.out.println("Liczba danych treningowych: " + trainingSet.size());
         //System.out.println("Liczba danych testowych: " + testSet.size());
 
@@ -201,12 +201,19 @@ public class Classifier {
         System.out.println("F1 dla West-Germany: " + f1Germany);
         System.out.println("F1 dla Canada: " + f1Canada);
         System.out.println("----------------------------------------------------------------");
+
+
         List<Double> results = new ArrayList<>();
+
         results.add(accuracy);
         results.add(precision);
         results.add(recall);
         results.add(f1);
+
+
         return results;
+
+
     }
     public String displayResults() {
         StringBuilder results = new StringBuilder();

@@ -29,7 +29,7 @@ class App2
         featuresIndexes.add(8);
         featuresIndexes.add(9);
 
-        int[] kValues = {1, 2, 4, 6, 9, 12, 16, 20, 25, 30};
+        int[] kValues = {1, 4, 8, 14};
 
         // Lista do przechowywania wyników accuracy
         List<List<Double>> accuracyResults = new ArrayList<>();
@@ -39,8 +39,8 @@ class App2
         for (int k : kValues) {
             DataExtarctor dataExtarctor = new DataExtarctor();
             ArrayList<ReadyArticle> readyArticles = dataExtarctor.readFromFile();
-            Euclidean metric = new Euclidean();
-            Classifier classifier = new Classifier(k, metric, 0.6, featuresIndexes);
+            Street metric = new Street();
+            Classifier classifier = new Classifier(k, metric, 0.5, featuresIndexes);
             List<Double> results = classifier.start(readyArticles);
 
             // Dodajemy wynik accuracy do listy
@@ -51,13 +51,13 @@ class App2
         chart.pack();
         chart.setVisible(true);
 
-        double[] setValues = {0.8, 0.6, 0.5, 0.3, 0.2};
+        double[] setValues = {0.7, 0.5, 0.3};
 
         for (double set : setValues) {
             DataExtarctor dataExtarctor = new DataExtarctor();
             ArrayList<ReadyArticle> readyArticles = dataExtarctor.readFromFile();
-            Euclidean metric = new Euclidean();
-            Classifier classifier = new Classifier(9, metric, set, featuresIndexes);
+            Street metric = new Street();
+            Classifier classifier = new Classifier(4, metric, set, featuresIndexes);
             List<Double> results = classifier.start(readyArticles);
 
             // Dodajemy wynik accuracy do listy
@@ -74,7 +74,7 @@ class App2
         for (IMetric metric : metrics) {
             DataExtarctor dataExtarctor = new DataExtarctor();
             ArrayList<ReadyArticle> readyArticles = dataExtarctor.readFromFile();
-            Classifier classifier = new Classifier(9, metric, 0.6, featuresIndexes);
+            Classifier classifier = new Classifier(4, metric, 0.5, featuresIndexes);
             List<Double> results = classifier.start(readyArticles);
 
             // Dodajemy wynik accuracy do listy
@@ -123,9 +123,9 @@ class App2
         for (ArrayList<Integer> currentFeaturesIndexes : featuresIndexesList) {
                 DataExtarctor dataExtarctor = new DataExtarctor();
                 ArrayList<ReadyArticle> readyArticles = dataExtarctor.readFromFile();
-                Euclidean metric = new Euclidean();
+                Street metric = new Street();
                 // Używamy aktualnego zestawu cech do utworzenia klasyfikatora
-                Classifier classifier = new Classifier(9, metric, 0.6, currentFeaturesIndexes);
+                Classifier classifier = new Classifier(4, metric, 0.5, currentFeaturesIndexes);
                 List<Double> results = classifier.start(readyArticles);
 
                 // Dodajemy wynik accuracy do listy
