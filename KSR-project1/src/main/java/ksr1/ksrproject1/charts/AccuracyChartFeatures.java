@@ -17,15 +17,15 @@ public class AccuracyChartFeatures extends ApplicationFrame {
         super(applicationTitle);
         JFreeChart barChart = ChartFactory.createBarChart(
                 chartTitle,
-                "Zestaw cech",
-                "Wartość metryki",
+                "Zbiór cech",
+                "Wartość miary jakości klasyfikacji",
                 createDataset(metricsResults),
                 PlotOrientation.VERTICAL,
                 true, true, false);
 
         CategoryPlot plot = barChart.getCategoryPlot();
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-        rangeAxis.setLowerBound(0.6);
+        rangeAxis.setLowerBound(0.4);
 
         ChartPanel chartPanel = new ChartPanel(barChart);
         chartPanel.setPreferredSize(new java.awt.Dimension(760, 717));
@@ -34,7 +34,7 @@ public class AccuracyChartFeatures extends ApplicationFrame {
 
     private DefaultCategoryDataset createDataset(List<List<Double>> metricsResults) {
         final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        String[] featuresValues = {"Zbiór Cech1", "Zbiór Cech2", "Zbiór Cech3", "Zbiór Cech4"};
+        String[] featuresValues = {"z1", "z2", "z3", "z4"};
         String[] metricsNames = {"Accuracy", "Precision", "Recall", "F1"};
 
         for (int i = 0; i < featuresValues.length; i++) {

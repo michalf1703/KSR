@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import ksr1.ksrproject1.DataOperations.DataExtarctor;
 import ksr1.ksrproject1.Metrics.Chebyshev;
@@ -24,11 +25,18 @@ public class AppController {
     private ChoiceBox<String> choiceMetric;
 
     @FXML
-    private TextField fillK, testingSetField;
+    private TextField fillK;
+    @FXML
+    private Slider podzialZbioruSlider;
+
+    @FXML
+    private Text podzialZbioruTekst;
 
     private String [] metrics = {"Metryka Euklidesowa", "Metryka Czebyszewa", "Metryka Uliczna"};
     private List<Integer> featuresIndexes;
     private IMetric metric;
+    @FXML
+    private TextField setFieldSpinner;
 
 
 
@@ -36,11 +44,10 @@ public class AppController {
     protected void initialize() {
         choiceMetric.getItems().addAll(metrics);
         fillK.setText("5");
-
-        // Inicjalizujemy listę featuresIndexes
         featuresIndexes = new ArrayList<>();
+        podzialZbioruSlider.setMin(1);
+        podzialZbioruSlider.setMax(99);
 
-        // Dodajemy słuchaczy do pól CheckBox
         addCheckboxListener(keyWordInAllFeature, 0);
         addCheckboxListener(keyWordFreqFeature, 1);
         addCheckboxListener(mostCurrencyFeature, 2);
@@ -52,8 +59,6 @@ public class AppController {
         addCheckboxListener(mostContinentFeature, 8);
         addCheckboxListener(mostKeyWordInTitleFeature, 9);
 
-
-        // Dodajemy słuchacza do pola ChoiceBox
         choiceMetric.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             switch (newValue) {
                 case "Metryka Euklidesowa":
@@ -67,14 +72,29 @@ public class AppController {
                     break;
             }
         });
+        podzialZbioruSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            double roundedValue = Math.round(newValue.doubleValue() * 100.0) / 100.0;
+            podzialZbioruTekst.setText("Udział zbioru uczącego: " + roundedValue + "%");
+            setFieldSpinner.setText(String.valueOf(roundedValue));
+        });
+        setFieldSpinner.textProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                double enteredValue = Double.parseDouble(newValue);
+                if (enteredValue >= 1 && enteredValue <= 99) {
+                    podzialZbioruSlider.setValue(enteredValue);
+                }
+            } catch (NumberFormatException e) {
+
+            }
+        });
     }
     @FXML
     protected void onStartButtonClick() {
         int k = Integer.parseInt(fillK.getText());
-        double set = Double.parseDouble(testingSetField.getText());
+        double sliderValue = podzialZbioruSlider.getValue()/100;
         DataExtarctor dataExtarctor = new DataExtarctor();
         ArrayList<ReadyArticle> readyArticles = dataExtarctor.readFromFile();
-        Classifier classifier = new Classifier(k,metric,set, featuresIndexes);
+        Classifier classifier = new Classifier(k,metric,sliderValue, featuresIndexes);
         classifier.start(readyArticles);
         String result = classifier.displayResults();
         VBox vbox = new VBox(new TextArea(result));
@@ -82,7 +102,6 @@ public class AppController {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.show();
-        //classifier.displayResults();
         System.out.println("Liczba artykułów z odpowiednią etykietą PLACE: " + dataExtarctor.getArticlesCount());
 
     }

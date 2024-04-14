@@ -17,7 +17,7 @@ public class AccuracyChartK extends ApplicationFrame {
         JFreeChart barChart = ChartFactory.createBarChart(
                 chartTitle,
                 "Wartość parametru k",
-                "Wartość metryki",
+                "Wartość miary jakości klasyfikacji",
                 createDataset(metricsResults),
                 PlotOrientation.VERTICAL,
                 true, true, false);
@@ -33,7 +33,7 @@ public class AccuracyChartK extends ApplicationFrame {
 
     private DefaultCategoryDataset createDataset(List<List<Double>> metricsResults) {
         final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        int[] kValues = {1, 2, 4, 6, 9, 12, 16, 20, 25, 30};
+        int[] kValues = {1, 4, 8, 14};
         String[] metricsNames = {"Accuracy", "Precision", "Recall", "F1"};
 
         for (int i = 0; i < metricsResults.size(); i++) {

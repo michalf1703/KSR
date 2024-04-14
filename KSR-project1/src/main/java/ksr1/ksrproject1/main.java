@@ -131,11 +131,13 @@ class App2
                 // Dodajemy wynik accuracy do listy
                 accuracyResults4.add(results);
                // classifier.displayResults();
+            System.out.println(dataExtarctor.getArticlesCount());
         }
 
-        AccuracyChartFeatures chart4 = new AccuracyChartFeatures("Accuracy Chart", "Zależność wartości miary jakości klasyfikacji od zestawu cech", accuracyResults4);
+        AccuracyChartFeatures chart4 = new AccuracyChartFeatures("Accuracy Chart", "Zależność wartości miary jakości klasyfikacji od zbioru cech", accuracyResults4);
         chart4.pack();
         chart4.setVisible(true);
+
 
     }
 }

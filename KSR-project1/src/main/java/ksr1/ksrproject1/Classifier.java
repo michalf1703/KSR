@@ -58,12 +58,13 @@ public class Classifier {
         List<List<DataInstance>> dataSets = DataInstance.splitDataSet(dataInstances, setDivision);
         List<DataInstance> trainingSet = dataSets.get(0);
         List<DataInstance> testSet = dataSets.get(1);
+        /*
         for(DataInstance dataInstance : trainingSet){
             System.out.println(dataInstance.getFeatureVector());
         }
         for(DataInstance dataInstance : testSet){
             System.out.println(dataInstance.getFeatureVector());
-        }
+        }*/
         // System.out.println("Liczba danych treningowych: " + trainingSet.size());
         //System.out.println("Liczba danych testowych: " + testSet.size());
 
@@ -176,8 +177,9 @@ public class Classifier {
         f1Canada = Math.round((2 * (precisionCanada * recallCanada) / (precisionCanada + recallCanada)) * 1000.0) / 1000.0;
         f1 = Math.round(((f1Usa*usaSize + f1Uk*ukSize + f1Japan*japanSize + f1France*franceSize + f1Germany*germanySize + f1Canada*canadaSize)/testSet.size()) * 1000.0) / 1000.0;
         System.out.println("----------------------------------------------------------------");
-        System.out.println("Usa.size):" + usaSize);
-        System.out.println("correct+incorrect):" + (correctUSA + incorrectUSA));
+        //System.out.println("Usa.size):" + usaSize);
+       // System.out.println("correct+incorrect):" + (correctUSA + incorrectUSA));
+       // System.out.println("Podzial zbioru na treningowy i testowy: " + setDivision);
         System.out.println("Dokładność klasyfikacji(accuracy): " + accuracy);
         System.out.println("Precyzja klasyfikacji dla calej klasyfikacji: " + precision);
         System.out.println("Czułość klasyfikacji dla calej klasyfikacji: " + recall);
@@ -217,29 +219,28 @@ public class Classifier {
     }
     public String displayResults() {
         StringBuilder results = new StringBuilder();
-        results.append("Dokładność klasyfikacji(accuracy): ").append(accuracy).append("%\n");
-        results.append("Precyzja klasyfikacji dla calej klasyfikacji: ").append(precision).append("%\n");
-        results.append("Czułość klasyfikacji dla calej klasyfikacji: ").append(recall).append("%\n");
+        results.append("Dokładność klasyfikacji(accuracy): ").append(accuracy).append("\n");
+        results.append("Precyzja klasyfikacji dla calej klasyfikacji: ").append(precision).append("\n");
+        results.append("Czułość klasyfikacji dla calej klasyfikacji: ").append(recall).append("\n");
          results.append("F1 dla calej klasyfikacji: ").append(f1).append("\n");
-        results.append("Precyzja klasyfikacji dla USA: ").append(precisionUSA).append("%\n");
-        results.append("Precyzja klasyfikacji dla UK: ").append(precisionUK).append("%\n");
-        results.append("Precyzja klasyfikacji dla Japan: ").append(precisionJapan).append("%\n");
-        results.append("Precyzja klasyfikacji dla France: ").append(precisionFrance).append("%\n");
-        results.append("Precyzja klasyfikacji dla West-Germany: ").append(precisionGermany).append("%\n");
-        results.append("Precyzja klasyfikacji dla Canada: ").append(precisionCanada).append("%\n");
-        results.append("Czułość klasyfikacji dla USA: ").append(recallUSA).append("%\n");
-        results.append("Czułość klasyfikacji dla UK: ").append(recallUK).append("%\n");
-        results.append("Czułość klasyfikacji dla Japan: ").append(recallJapan).append("%\n");
-        results.append("Czułość klasyfikacji dla France: ").append(recallFrance).append("%\n");
-        results.append("Czułość klasyfikacji dla West-Germany: ").append(recallGermany).append("%\n");
-        results.append("Czułość klasyfikacji dla Canada: ").append(recallCanada).append("%\n");
+        results.append("Precyzja klasyfikacji dla USA: ").append(precisionUSA).append("\n");
+        results.append("Precyzja klasyfikacji dla UK: ").append(precisionUK).append("\n");
+        results.append("Precyzja klasyfikacji dla Japan: ").append(precisionJapan).append("\n");
+        results.append("Precyzja klasyfikacji dla France: ").append(precisionFrance).append("\n");
+        results.append("Precyzja klasyfikacji dla West-Germany: ").append(precisionGermany).append("\n");
+        results.append("Precyzja klasyfikacji dla Canada: ").append(precisionCanada).append("\n");
+        results.append("Czułość klasyfikacji dla USA: ").append(recallUSA).append("\n");
+        results.append("Czułość klasyfikacji dla UK: ").append(recallUK).append("\n");
+        results.append("Czułość klasyfikacji dla Japan: ").append(recallJapan).append("\n");
+        results.append("Czułość klasyfikacji dla France: ").append(recallFrance).append("\n");
+        results.append("Czułość klasyfikacji dla West-Germany: ").append(recallGermany).append("\n");
+        results.append("Czułość klasyfikacji dla Canada: ").append(recallCanada).append("\n");
         results.append("F1 dla USA: ").append(f1Usa).append("\n");
         results.append("F1 dla UK: ").append(f1Uk).append("\n");
         results.append("F1 dla Japan: ").append(f1Japan).append("\n");
         results.append("F1 dla France: ").append(f1France).append("\n");
         results.append("F1 dla West-Germany: ").append(f1Germany).append("\n");
         results.append("F1 dla Canada: ").append(f1Canada).append("\n");
-        ResultsDisplay resultsDisplay = new ResultsDisplay();
         return results.toString();
     }
 

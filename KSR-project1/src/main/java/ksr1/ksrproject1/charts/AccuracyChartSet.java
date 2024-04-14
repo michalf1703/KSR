@@ -17,7 +17,7 @@ public class AccuracyChartSet extends ApplicationFrame {
         JFreeChart barChart = ChartFactory.createBarChart(
                 chartTitle,
                 "Podział zbioru uczącego i testowego",
-                "Wartość metryki",
+                "Wartość miary jakości klasyfikacji",
                 createDataset(metricsResults),
                 PlotOrientation.VERTICAL,
                 true, true, false);
@@ -32,13 +32,13 @@ public class AccuracyChartSet extends ApplicationFrame {
 
     private DefaultCategoryDataset createDataset(List<List<Double>> metricsResults) {
         final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        double [] setValues = {0.8, 0.6, 0.5, 0.3, 0.2};
+        String[] setValues = {"70/30", "50/50", "30/70"};
         String[] metricsNames = {"Accuracy", "Precision", "Recall", "F1"};
 
         for (int i = 0; i < metricsResults.size(); i++) {
             List<Double> metricResults = metricsResults.get(i);
             for (int j = 0; j < metricResults.size(); j++) {
-                dataset.addValue(metricResults.get(j), metricsNames[j], Double.toString(setValues[i]));
+                dataset.addValue(metricResults.get(j), metricsNames[j], setValues[i]);
             }
         }
 
